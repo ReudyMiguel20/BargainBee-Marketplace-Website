@@ -1,13 +1,13 @@
-package com.reudymiguel.listingservice;
+package com.reudymiguel.itemlistingservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ListingServiceApplication {
-    
+public class ItemListingServiceApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(ListingServiceApplication.class, args);
+        SpringApplication.run(ItemListingServiceApplication.class, args);
     }
 
 }

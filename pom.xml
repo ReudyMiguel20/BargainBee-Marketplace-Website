@@ -17,7 +17,7 @@
 	<name>BargainBee</name>
 	<description>BargainBee</description>
 	<modules>
-		<module>listing-service</module>
+		<module>itemlisting-service</module>
 	</modules>
 
 	<properties>
