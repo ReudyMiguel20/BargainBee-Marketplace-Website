@@ -1,4 +1,4 @@
-package com.reudymiguel.itemlistingservice.model.dto;
+package com.bargainbee.itemlistingservice.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

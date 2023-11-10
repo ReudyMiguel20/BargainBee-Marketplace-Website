@@ -1,32 +1,27 @@
-package com.reudymiguel.itemlistingservice.model.entity;
+package com.bargainbee.itemlistingservice.model.dto;
 
+import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "t_items")
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@Builder
 @AllArgsConstructor
-public class Item {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@NoArgsConstructor
+public class ItemInfo {
 
     private String itemId;
 
     @JsonProperty(value = "item_name")
     private String itemName;
-
-    private String description;
 
     private double price;
 
@@ -38,13 +33,9 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private Condition condition;
 
-//    private User seller;
-
     private String image;
 
     private boolean available;
-
-    private boolean featured;
 
     @JsonProperty(value = "date_listed")
     private LocalDate dateListed;

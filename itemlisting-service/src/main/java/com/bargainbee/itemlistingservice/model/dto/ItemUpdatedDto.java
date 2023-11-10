@@ -1,8 +1,8 @@
-package com.reudymiguel.itemlistingservice.model.dto;
+package com.bargainbee.itemlistingservice.model.dto;
 
+import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.reudymiguel.itemlistingservice.model.entity.Category;
-import com.reudymiguel.itemlistingservice.model.entity.Condition;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;

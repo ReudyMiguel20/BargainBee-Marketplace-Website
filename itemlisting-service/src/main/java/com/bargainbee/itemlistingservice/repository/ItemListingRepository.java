@@ -1,7 +1,7 @@
-package com.reudymiguel.itemlistingservice.repository;
+package com.bargainbee.itemlistingservice.repository;
 
-import com.reudymiguel.itemlistingservice.model.entity.Category;
-import com.reudymiguel.itemlistingservice.model.entity.Item;
+import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
