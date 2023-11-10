@@ -1,6 +1,7 @@
 package com.reudymiguel.itemlistingservice.service.impl;
 
 import com.reudymiguel.itemlistingservice.model.dto.ItemInfo;
+import com.reudymiguel.itemlistingservice.model.dto.ItemStatus;
 import com.reudymiguel.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.reudymiguel.itemlistingservice.model.dto.NewItemDto;
 import com.reudymiguel.itemlistingservice.model.entity.Category;
@@ -54,6 +55,18 @@ public class ItemListingServiceImpl implements ItemListingService {
     }
 
     @Override
+    public ItemStatus deleteItem(String itemId) {
+        Item itemToDelete = itemListingRepository.findItemByItemId(itemId).orElseThrow();
+
+        itemListingRepository.delete(itemToDelete);
+
+        return ItemStatus.builder()
+                .itemId(itemId)
+                .status("Item has been deleted successfully")
+                .build();
+    }
+
+    @Override
     public List<Item> getItemsByCategory(Category category) {
         return itemListingRepository.findItemsByCategory(category);
     }
@@ -86,6 +99,8 @@ public class ItemListingServiceImpl implements ItemListingService {
         item.setImage(itemUpdatedDto.getImage());
         item.setTags(itemUpdatedDto.getTags());
     }
+
+
 
 
 }

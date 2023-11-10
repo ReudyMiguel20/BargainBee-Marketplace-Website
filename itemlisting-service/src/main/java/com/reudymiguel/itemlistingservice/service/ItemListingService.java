@@ -1,6 +1,7 @@
 package com.reudymiguel.itemlistingservice.service;
 
 import com.reudymiguel.itemlistingservice.model.dto.ItemInfo;
+import com.reudymiguel.itemlistingservice.model.dto.ItemStatus;
 import com.reudymiguel.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.reudymiguel.itemlistingservice.model.dto.NewItemDto;
 import com.reudymiguel.itemlistingservice.model.entity.Category;
@@ -22,4 +23,6 @@ public interface ItemListingService {
     ItemInfo updateItem(String itemId, ItemUpdatedDto itemUpdatedDto);
 
     void updateItemValues(Item item, ItemUpdatedDto itemUpdatedDto);
+
+    ItemStatus deleteItem(String itemId);
 }
