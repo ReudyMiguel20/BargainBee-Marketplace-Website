@@ -52,6 +52,12 @@ public class ItemListingController {
         return itemListingService.getFeaturedItems();
     }
 
+    @GetMapping("/related/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Item> getAllRelatedItems(@PathVariable String itemId) {
+        return itemListingService.getRelatedItems(itemId);
+    }
+
 
 
 

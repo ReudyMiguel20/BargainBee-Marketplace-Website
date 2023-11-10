@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -24,9 +25,10 @@ public class ItemListingServiceImpl implements ItemListingService {
     private final ModelMapper modelMapper;
 
     /**
+     * Creates a new item and saves it to the database
      *
-     * @param newItemDto
-     * @return
+     * @param newItemDto - DTO containing the new item information
+     * @return - ItemInfo containing the new item information
      */
     @Override
     public ItemInfo createItem(NewItemDto newItemDto) {
@@ -42,18 +44,29 @@ public class ItemListingServiceImpl implements ItemListingService {
         return modelMapper.map(newItem, ItemInfo.class);
     }
 
+    /**
+     * Updates an existing item and saves it to the database with the new values provided
+     *
+     * @param itemId         - Item ID of the item to be updated
+     * @param itemUpdatedDto - DTO containing the new item information
+     * @return - ItemInfo containing the updated item information
+     */
     @Override
     public ItemInfo updateItem(String itemId, ItemUpdatedDto itemUpdatedDto) {
         Item itemToUpdate = itemListingRepository.findItemByItemId(itemId).orElseThrow();
 
-        // Set respective values to the item
         updateItemValues(itemToUpdate, itemUpdatedDto);
-
         itemListingRepository.save(itemToUpdate);
 
         return modelMapper.map(itemToUpdate, ItemInfo.class);
     }
 
+    /**
+     * Deletes an existing item from the database with the provided item ID and returns a status message
+     *
+     * @param itemId - Item ID of the item to be deleted
+     * @return - ItemStatus containing the status message
+     */
     @Override
     public ItemStatus deleteItem(String itemId) {
         Item itemToDelete = itemListingRepository.findItemByItemId(itemId).orElseThrow();
@@ -69,6 +82,13 @@ public class ItemListingServiceImpl implements ItemListingService {
     @Override
     public List<Item> getFeaturedItems() {
         return itemListingRepository.findFeaturedItems();
+    }
+
+    @Override
+    public List<Item> getRelatedItems(String itemId) {
+        Item item = itemListingRepository.findItemByItemId(itemId).orElseThrow();
+        Category category = item.getCategory();
+        return itemListingRepository.findRelatedItems(itemId, category);
     }
 
     @Override
@@ -94,6 +114,12 @@ public class ItemListingServiceImpl implements ItemListingService {
         item.setDateListed(LocalDate.now());
     }
 
+    /**
+     * Updates the values of an existing item with the new values provided in the DTO
+     *
+     * @param item           - Item to be updated
+     * @param itemUpdatedDto - DTO containing the new item information
+     */
     @Override
     public void updateItemValues(Item item, ItemUpdatedDto itemUpdatedDto) {
         item.setItemName(itemUpdatedDto.getItemName());
@@ -104,8 +130,6 @@ public class ItemListingServiceImpl implements ItemListingService {
         item.setImage(itemUpdatedDto.getImage());
         item.setTags(itemUpdatedDto.getTags());
     }
-
-
 
 
 }

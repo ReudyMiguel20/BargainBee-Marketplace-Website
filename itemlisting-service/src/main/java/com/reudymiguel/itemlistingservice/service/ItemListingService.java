@@ -27,4 +27,6 @@ public interface ItemListingService {
     ItemStatus deleteItem(String itemId);
 
     List<Item> getFeaturedItems();
+
+    List<Item> getRelatedItems(String itemId);
 }

@@ -19,4 +19,7 @@ public interface ItemListingRepository extends JpaRepository<Item, Long>,
 
     @Query("SELECT i FROM Item i WHERE i.featured = true")
     List<Item> findFeaturedItems();
+
+    @Query("SELECT i FROM Item i WHERE i.itemId <> ?1 AND i.category = ?2 ORDER BY RANDOM() LIMIT 3")
+    List<Item> findRelatedItems(String itemId, Category category);
 }
