@@ -1,9 +1,8 @@
 package com.bargainbee.itemlistingservice.service.impl;
 
-import com.bargainbee.itemlistingservice.model.dto.ItemStatus;
 import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
-import com.bargainbee.itemlistingservice.model.dto.NewItemDto;
+import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 import com.bargainbee.itemlistingservice.repository.ItemListingRepository;
@@ -26,12 +25,12 @@ public class ItemListingServiceImpl implements ItemListingService {
     /**
      * Creates a new item and saves it to the database
      *
-     * @param newItemDto - DTO containing the new item information
+     * @param newItemRequest - DTO containing the new item information
      * @return - ItemInfo containing the new item information
      */
     @Override
-    public ItemInfo createItem(NewItemDto newItemDto) {
-        Item newItem = modelMapper.map(newItemDto, Item.class);
+    public ItemInfo createItem(NewItemRequest newItemRequest) {
+        Item newItem = modelMapper.map(newItemRequest, Item.class);
 
         // Set respective values to the item
         generateAndSetUUIDCode(newItem);
@@ -67,15 +66,10 @@ public class ItemListingServiceImpl implements ItemListingService {
      * @return - ItemStatus containing the status message
      */
     @Override
-    public ItemStatus deleteItem(String itemId) {
+    public void deleteItem(String itemId) {
+        //Throw an error here if the item does not exist
         Item itemToDelete = itemListingRepository.findItemByItemId(itemId).orElseThrow();
-
         itemListingRepository.delete(itemToDelete);
-
-        return ItemStatus.builder()
-                .itemId(itemId)
-                .status("Item has been deleted successfully")
-                .build();
     }
 
     @Override
