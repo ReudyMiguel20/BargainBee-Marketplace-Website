@@ -1,4 +1,4 @@
-package com.bargainbee.itemlistingservice.controller;
+package com.bargainbee.itemlistingservice.integration.controller;
 
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
@@ -141,7 +141,6 @@ class ItemListingControllerTest {
         Assertions.assertThat(newItem.getItemName()).isEqualTo(newItemRequest.getItemName());
         Assertions.assertThat(newItem.getId()).isNotNull();
         Assertions.assertThat(newItem.getId()).isInstanceOf(Long.class);
-
     }
 
     @Test
@@ -164,7 +163,6 @@ class ItemListingControllerTest {
         Assertions.assertThat(updatedItem.getId()).isInstanceOf(Long.class);
         Assertions.assertThat(updatedItem).isInstanceOf(Item.class);
         Assertions.assertThat(oldItem).isNotEqualTo(updatedItem);
-
     }
 
     @Test
@@ -180,7 +178,6 @@ class ItemListingControllerTest {
         // Assert
         Assertions.assertThat(itemListingRepository.findAll().size()).isEqualTo(0);
         Assertions.assertThat(itemListingRepository.findById(1L).isEmpty()).isTrue();
-
     }
 
 }
