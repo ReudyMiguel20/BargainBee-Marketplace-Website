@@ -1,11 +1,11 @@
-package com.reudymiguel.itemlistingservice.service;
+package com.bargainbee.itemlistingservice.service;
 
-import com.reudymiguel.itemlistingservice.model.dto.ItemInfo;
-import com.reudymiguel.itemlistingservice.model.dto.ItemStatus;
-import com.reudymiguel.itemlistingservice.model.dto.ItemUpdatedDto;
-import com.reudymiguel.itemlistingservice.model.dto.NewItemDto;
-import com.reudymiguel.itemlistingservice.model.entity.Category;
-import com.reudymiguel.itemlistingservice.model.entity.Item;
+import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
+import com.bargainbee.itemlistingservice.model.dto.ItemStatus;
+import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
+import com.bargainbee.itemlistingservice.model.dto.NewItemDto;
+import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Item;
 
 import java.util.List;
 

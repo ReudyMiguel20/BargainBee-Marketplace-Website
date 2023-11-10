@@ -1,4 +1,4 @@
-package com.reudymiguel.itemlistingservice.config;
+package com.bargainbee.itemlistingservice.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

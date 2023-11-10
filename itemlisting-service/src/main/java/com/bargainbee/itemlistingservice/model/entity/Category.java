@@ -1,4 +1,4 @@
-package com.reudymiguel.itemlistingservice.model.entity;
+package com.bargainbee.itemlistingservice.model.entity;
 
 public enum Category {
     ELECTRONICS,

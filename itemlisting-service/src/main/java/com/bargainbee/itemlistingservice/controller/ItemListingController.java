@@ -1,12 +1,12 @@
-package com.reudymiguel.itemlistingservice.controller;
+package com.bargainbee.itemlistingservice.controller;
 
-import com.reudymiguel.itemlistingservice.model.dto.ItemStatus;
-import com.reudymiguel.itemlistingservice.model.dto.ItemUpdatedDto;
-import com.reudymiguel.itemlistingservice.model.dto.NewItemDto;
-import com.reudymiguel.itemlistingservice.model.dto.ItemInfo;
-import com.reudymiguel.itemlistingservice.model.entity.Category;
-import com.reudymiguel.itemlistingservice.model.entity.Item;
-import com.reudymiguel.itemlistingservice.service.ItemListingService;
+import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
+import com.bargainbee.itemlistingservice.model.dto.ItemStatus;
+import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
+import com.bargainbee.itemlistingservice.model.dto.NewItemDto;
+import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Item;
+import com.bargainbee.itemlistingservice.service.ItemListingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

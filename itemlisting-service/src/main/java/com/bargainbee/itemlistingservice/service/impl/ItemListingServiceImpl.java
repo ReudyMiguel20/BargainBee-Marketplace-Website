@@ -1,20 +1,19 @@
-package com.reudymiguel.itemlistingservice.service.impl;
+package com.bargainbee.itemlistingservice.service.impl;
 
-import com.reudymiguel.itemlistingservice.model.dto.ItemInfo;
-import com.reudymiguel.itemlistingservice.model.dto.ItemStatus;
-import com.reudymiguel.itemlistingservice.model.dto.ItemUpdatedDto;
-import com.reudymiguel.itemlistingservice.model.dto.NewItemDto;
-import com.reudymiguel.itemlistingservice.model.entity.Category;
-import com.reudymiguel.itemlistingservice.model.entity.Item;
-import com.reudymiguel.itemlistingservice.repository.ItemListingRepository;
-import com.reudymiguel.itemlistingservice.service.ItemListingService;
+import com.bargainbee.itemlistingservice.model.dto.ItemStatus;
+import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
+import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
+import com.bargainbee.itemlistingservice.model.dto.NewItemDto;
+import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Item;
+import com.bargainbee.itemlistingservice.repository.ItemListingRepository;
+import com.bargainbee.itemlistingservice.service.ItemListingService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @Service
