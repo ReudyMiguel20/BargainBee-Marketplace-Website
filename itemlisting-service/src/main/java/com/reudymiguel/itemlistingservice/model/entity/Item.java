@@ -44,6 +44,8 @@ public class Item {
 
     private boolean available;
 
+    private boolean featured;
+
     @JsonProperty(value = "date_listed")
     private LocalDate dateListed;
 

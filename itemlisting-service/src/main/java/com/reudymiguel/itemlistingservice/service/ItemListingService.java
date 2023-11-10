@@ -25,4 +25,6 @@ public interface ItemListingService {
     void updateItemValues(Item item, ItemUpdatedDto itemUpdatedDto);
 
     ItemStatus deleteItem(String itemId);
+
+    List<Item> getFeaturedItems();
 }

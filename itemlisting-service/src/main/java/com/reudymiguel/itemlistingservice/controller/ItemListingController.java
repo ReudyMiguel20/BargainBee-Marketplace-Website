@@ -27,13 +27,6 @@ public class ItemListingController {
         return itemListingService.createItem(item);
     }
 
-    @GetMapping("/category/{categoryName}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Item> getAllItemsByCategory(@PathVariable String categoryName) {
-        Category category = Category.valueOf(categoryName.toUpperCase());
-        return itemListingService.getItemsByCategory(category);
-    }
-
     @PutMapping("/update/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public ItemInfo updateItem(@PathVariable String itemId, @RequestBody ItemUpdatedDto itemUpdatedDto) {
@@ -45,5 +38,22 @@ public class ItemListingController {
     public ItemStatus deleteItem(@PathVariable String itemId) {
         return itemListingService.deleteItem(itemId);
     }
+
+    @GetMapping("/category/{categoryName}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Item> getAllItemsByCategory(@PathVariable String categoryName) {
+        Category category = Category.valueOf(categoryName.toUpperCase());
+        return itemListingService.getItemsByCategory(category);
+    }
+
+    @GetMapping("/featured")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Item> getAllFeaturedItems() {
+        return itemListingService.getFeaturedItems();
+    }
+
+
+
+
 
 }

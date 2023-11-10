@@ -67,6 +67,11 @@ public class ItemListingServiceImpl implements ItemListingService {
     }
 
     @Override
+    public List<Item> getFeaturedItems() {
+        return itemListingRepository.findFeaturedItems();
+    }
+
+    @Override
     public List<Item> getItemsByCategory(Category category) {
         return itemListingRepository.findItemsByCategory(category);
     }
