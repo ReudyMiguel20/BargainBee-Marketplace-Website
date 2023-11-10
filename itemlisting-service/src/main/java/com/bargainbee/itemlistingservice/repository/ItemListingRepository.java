@@ -18,6 +18,7 @@ public interface ItemListingRepository extends JpaRepository<Item, Long>,
         PagingAndSortingRepository<Item, Long> {
 
     List<Item> findItemsByCategory(Category category);
+
     Optional<Item> findItemByItemId(String itemId);
 
     @Query("SELECT i FROM Item i WHERE i.featured = true")
@@ -30,4 +31,5 @@ public interface ItemListingRepository extends JpaRepository<Item, Long>,
     @Modifying
     @Query(value = "ALTER SEQUENCE t_items_id_seq RESTART WITH 1", nativeQuery = true)
     void resetSequence();
+
 }
