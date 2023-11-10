@@ -1,9 +1,8 @@
 package com.bargainbee.itemlistingservice.controller;
 
 import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
-import com.bargainbee.itemlistingservice.model.dto.ItemStatus;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
-import com.bargainbee.itemlistingservice.model.dto.NewItemDto;
+import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 import com.bargainbee.itemlistingservice.service.ItemListingService;
@@ -23,7 +22,7 @@ public class ItemListingController {
     // Remember to get the user email/name from the request header
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemInfo createItemPost(@RequestBody NewItemDto item) {
+    public ItemInfo createItemPost(@RequestBody NewItemRequest item) {
         return itemListingService.createItem(item);
     }
 
@@ -34,9 +33,9 @@ public class ItemListingController {
     }
 
     @DeleteMapping("/delete/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ItemStatus deleteItem(@PathVariable String itemId) {
-        return itemListingService.deleteItem(itemId);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteItem(@PathVariable String itemId) {
+        itemListingService.deleteItem(itemId);
     }
 
     @GetMapping("/category/{categoryName}")

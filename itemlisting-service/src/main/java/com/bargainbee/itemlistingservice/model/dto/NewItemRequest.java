@@ -1,8 +1,8 @@
 package com.bargainbee.itemlistingservice.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Condition;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewItemDto {
+public class NewItemRequest {
 
     @JsonProperty(value = "item_name")
     private String itemName;
