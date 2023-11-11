@@ -117,6 +117,7 @@ public class ItemListingServiceImpl implements ItemListingService {
     @Override
     public void updateItemValues(Item item, ItemUpdatedDto itemUpdatedDto) {
         item.setItemName(itemUpdatedDto.getItemName());
+        item.setDescription(itemUpdatedDto.getDescription());
         item.setPrice(itemUpdatedDto.getPrice());
         item.setQuantity(itemUpdatedDto.getQuantity());
         item.setCategory(itemUpdatedDto.getCategory());

@@ -38,6 +38,7 @@ class ItemListingServiceTest {
     private ItemListingRepository itemListingRepository;
 
 
+    // Tests
 
 
     @Test
@@ -59,6 +60,33 @@ class ItemListingServiceTest {
         verify(itemListingRepository, times(1)).save(mockedItem);
         verify(modelMapper, times(1)).map(newItemRequest, Item.class);
         verify(modelMapper, times(1)).map(mockedItem, ItemInfo.class);
+    }
+
+    @Test
+    void updateItemValues() {
+        // Arrange
+        Item itemToUpdate = new Item();
+
+        ItemUpdatedDto itemUpdatedDto = ItemUpdatedDto.builder()
+                .itemName("New Item Name")
+                .category(Category.ELECTRONICS)
+                .condition(Condition.NEW)
+                .description("New Description")
+                .price(100.00)
+                .quantity(10)
+                .image("test.jpg")
+                .tags("New Tag").build();
+
+        // Act
+        itemListingService.updateItemValues(itemToUpdate, itemUpdatedDto);
+
+        // Assert
+        Assertions.assertThat(itemToUpdate.getItemName()).isEqualTo(itemUpdatedDto.getItemName());
+        Assertions.assertThat(itemToUpdate.getCategory()).isEqualTo(itemUpdatedDto.getCategory());
+        Assertions.assertThat(itemToUpdate.getCondition()).isEqualTo(itemUpdatedDto.getCondition());
+        Assertions.assertThat(itemToUpdate.getDescription()).isEqualTo(itemUpdatedDto.getDescription());
+        Assertions.assertThat(itemToUpdate.getPrice()).isEqualTo(itemUpdatedDto.getPrice());
+        Assertions.assertThat(itemToUpdate.getQuantity()).isEqualTo(itemUpdatedDto.getQuantity());
     }
 
     @Test
@@ -84,30 +112,5 @@ class ItemListingServiceTest {
         verify(itemListingRepository, times(1)).save(itemToUpdate);
         verify(modelMapper, times(1)).map(itemToUpdate, ItemInfo.class);
     }
-
-    @Test
-    void updateItemValues() {
-        // Arrange
-        Item itemToUpdate = new Item();
-        ItemUpdatedDto itemUpdatedDto = new ItemUpdatedDto();
-        itemUpdatedDto.setItemName("New Item Name");
-        itemUpdatedDto.setCategory(Category.ELECTRONICS);
-        itemUpdatedDto.setCondition(Condition.NEW);
-        itemUpdatedDto.setDescription("New Description");
-        itemUpdatedDto.setPrice(100.00);
-        itemUpdatedDto.setQuantity(10);
-
-        // Act
-        itemListingService.updateItemValues(itemToUpdate, itemUpdatedDto);
-
-        // Assert
-        Assert.assertEquals(itemToUpdate.getItemName(), itemUpdatedDto.getItemName());
-        Assert.assertEquals(itemToUpdate.getCategory(), itemUpdatedDto.getCategory());
-        Assert.assertEquals(itemToUpdate.getCondition(), itemUpdatedDto.getCondition());
-        Assert.assertEquals(itemToUpdate.getDescription(), itemUpdatedDto.getDescription());
-        Assert.assertEquals(itemToUpdate.getPrice(), itemUpdatedDto.getPrice());
-        Assert.assertEquals(itemToUpdate.getQuantity(), itemUpdatedDto.getQuantity());
-    }
-
 
 }
