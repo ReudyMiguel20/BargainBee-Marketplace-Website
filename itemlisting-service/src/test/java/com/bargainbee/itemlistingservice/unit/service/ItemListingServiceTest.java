@@ -1,6 +1,7 @@
 package com.bargainbee.itemlistingservice.unit.service;
 
 import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
+import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Condition;
@@ -17,16 +18,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 @Testcontainers
@@ -40,68 +37,77 @@ class ItemListingServiceTest {
     @Mock
     private ItemListingRepository itemListingRepository;
 
-    private NewItemRequest createNewItemRequest(Category category, Condition condition) {
-        return NewItemRequest.builder()
-                .itemName("testItem")
-                .description("testDescription")
-                .price(100.0)
-                .quantity(10)
-                .category(category)
-                .condition(condition)
-                .image("testImage")
-                .tags("testTags")
-                .build();
-    }
 
-    private Item createNewItem(NewItemRequest newItemRequest) {
-        return Item.builder()
-                .itemId(UUID.randomUUID().toString())
-                .itemName(newItemRequest.getItemName())
-                .description(newItemRequest.getDescription())
-                .price(newItemRequest.getPrice())
-                .quantity(newItemRequest.getQuantity())
-                .category(newItemRequest.getCategory())
-                .condition(newItemRequest.getCondition())
-                .image(newItemRequest.getImage())
-                .tags(newItemRequest.getTags())
-                .build();
-    }
 
-    private ItemInfo createExpectedItemInfo(Item item) {
-        return ItemInfo.builder()
-                .itemId(item.getItemId())
-                .itemName(item.getItemName())
-                .price(item.getPrice())
-                .quantity(item.getQuantity())
-                .category(item.getCategory())
-                .condition(item.getCondition())
-                .image(item.getImage())
-                .tags(item.getTags())
-                .build();
+
+    @Test
+    void createItem() {
+        // Arrange
+        NewItemRequest newItemRequest = new NewItemRequest();
+        Item mockedItem = new Item();
+        ItemInfo mockedItemInfo = new ItemInfo();
+
+        when(modelMapper.map(newItemRequest, Item.class)).thenReturn(mockedItem);
+        when(itemListingRepository.save(mockedItem)).thenReturn(mockedItem);
+        when(modelMapper.map(mockedItem, ItemInfo.class)).thenReturn(mockedItemInfo);
+
+        // Act
+        ItemInfo result = itemListingService.createItem(newItemRequest);
+
+        // Assert
+        Assertions.assertThat(result).isNotNull();
+        verify(itemListingRepository, times(1)).save(mockedItem);
+        verify(modelMapper, times(1)).map(newItemRequest, Item.class);
+        verify(modelMapper, times(1)).map(mockedItem, ItemInfo.class);
     }
 
     @Test
-    void shouldCreateItemSuccessfully() {
+    void updateItem() {
         // Arrange
-        NewItemRequest newItemRequest = createNewItemRequest(Category.ELECTRONICS, Condition.NEW);
-        Item newItem = createNewItem(newItemRequest);
-        ItemInfo expectedItemInfo = createExpectedItemInfo(newItem);
+        String itemId = UUID.randomUUID().toString();
+        Item itemToUpdate = new Item();
+        ItemUpdatedDto itemUpdatedDto = new ItemUpdatedDto();
+        ItemInfo mockedUpdatedItemInfo = new ItemInfo();
 
-        when(modelMapper.map(newItemRequest, Item.class)).thenReturn(newItem);
-        when(itemListingRepository.save(newItem)).thenReturn(newItem);
-        when(modelMapper.map(newItem, ItemInfo.class)).thenReturn(expectedItemInfo);
+        when(itemListingRepository.findItemByItemId(itemId)).thenReturn(Optional.of(itemToUpdate));
+        when(itemListingRepository.save(any())).thenReturn(itemToUpdate);
+        when(modelMapper.map(itemToUpdate, ItemInfo.class)).thenReturn(mockedUpdatedItemInfo);
 
         // Act
-        ItemInfo createdItemInfo = itemListingService.createItem(newItemRequest);
+        ItemInfo result = itemListingService.updateItem(itemId, itemUpdatedDto);
 
         // Assert
-        Assertions.assertThat(createdItemInfo.getItemId()).isEqualTo(newItem.getItemId());
-        Assertions.assertThat(createdItemInfo).isNotNull();
+        Assertions.assertThat(result).isNotNull();
 
         // Verify
-        verify(itemListingRepository).save(newItem);
-        verify(modelMapper).map(newItemRequest, Item.class);
-        verify(modelMapper).map(newItem, ItemInfo.class);
+        verify(itemListingRepository, times(1)).findItemByItemId(itemId);
+        verify(itemListingRepository, times(1)).save(itemToUpdate);
+        verify(modelMapper, times(1)).map(itemToUpdate, ItemInfo.class);
     }
+
+    @Test
+    void updateItemValues() {
+        // Arrange
+        Item itemToUpdate = new Item();
+        ItemUpdatedDto itemUpdatedDto = new ItemUpdatedDto();
+        itemUpdatedDto.setItemName("New Item Name");
+        itemUpdatedDto.setCategory(Category.ELECTRONICS);
+        itemUpdatedDto.setCondition(Condition.NEW);
+        itemUpdatedDto.setDescription("New Description");
+        itemUpdatedDto.setPrice(100.00);
+        itemUpdatedDto.setQuantity(10);
+
+        // Act
+        itemListingService.updateItemValues(itemToUpdate, itemUpdatedDto);
+
+        // Assert
+        Assert.assertEquals(itemToUpdate.getItemName(), itemUpdatedDto.getItemName());
+        Assert.assertEquals(itemToUpdate.getCategory(), itemUpdatedDto.getCategory());
+        Assert.assertEquals(itemToUpdate.getCondition(), itemUpdatedDto.getCondition());
+        Assert.assertEquals(itemToUpdate.getDescription(), itemUpdatedDto.getDescription());
+        Assert.assertEquals(itemToUpdate.getPrice(), itemUpdatedDto.getPrice());
+        Assert.assertEquals(itemToUpdate.getQuantity(), itemUpdatedDto.getQuantity());
+    }
+
 
 }

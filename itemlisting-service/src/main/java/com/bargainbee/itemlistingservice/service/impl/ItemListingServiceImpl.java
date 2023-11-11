@@ -90,9 +90,10 @@ public class ItemListingServiceImpl implements ItemListingService {
     }
 
     @Override
-    public void generateAndSetUUIDCode(Item item) {
+    public Item generateAndSetUUIDCode(Item item) {
         String code = UUID.randomUUID().toString();
         item.setItemId(code);
+        return item;
     }
 
     @Override

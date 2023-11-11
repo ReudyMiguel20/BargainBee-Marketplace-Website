@@ -13,7 +13,7 @@ public interface ItemListingService {
 
     List<Item> getItemsByCategory(Category category);
 
-    void generateAndSetUUIDCode(Item itemToBeListed);
+    Item generateAndSetUUIDCode(Item itemToBeListed);
 
     void setAvailability(Item itemToBeListed);
 
