@@ -7,10 +7,8 @@ import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 import com.bargainbee.itemlistingservice.repository.ItemListingRepository;
-import com.bargainbee.itemlistingservice.service.ItemListingService;
 import com.bargainbee.itemlistingservice.service.impl.ItemListingServiceImpl;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +18,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -111,6 +111,122 @@ class ItemListingServiceTest {
         verify(itemListingRepository, times(1)).findItemByItemId(itemId);
         verify(itemListingRepository, times(1)).save(itemToUpdate);
         verify(modelMapper, times(1)).map(itemToUpdate, ItemInfo.class);
+    }
+
+    @Test
+    void deleteItem() {
+        // Arrange
+        String itemId = UUID.randomUUID().toString();
+        Item itemToDelete = new Item();
+
+        when(itemListingRepository.findItemByItemId(itemId)).thenReturn(Optional.of(itemToDelete));
+
+        // Act
+        itemListingService.deleteItem(itemId);
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemByItemId(itemId);
+        verify(itemListingRepository, times(1)).delete(itemToDelete);
+    }
+
+    @Test
+    void getFeaturedItems() {
+        // Arrange
+        Item item = new Item();
+        item.setFeatured(true);
+        when(itemListingRepository.findFeaturedItems()).thenReturn(java.util.List.of(item));
+
+        // Act
+        List<Item> result = itemListingService.getFeaturedItems();
+
+        // Assert
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).isFeatured()).isTrue();
+
+        // Verify
+        verify(itemListingRepository, times(1)).findFeaturedItems();
+    }
+
+    @Test
+    void getRelatedItems() {
+        // Arrange
+        String itemId = UUID.randomUUID().toString();
+        Item item = new Item();
+        item.setCategory(Category.ELECTRONICS);
+        when(itemListingRepository.findItemByItemId(itemId)).thenReturn(Optional.of(item));
+        when(itemListingRepository.findRelatedItems(itemId, Category.ELECTRONICS)).thenReturn(java.util.List.of(item));
+
+        // Act
+        List<Item> result = itemListingService.getRelatedItems(itemId);
+
+        // Assert
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getCategory()).isEqualTo(Category.ELECTRONICS);
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemByItemId(itemId);
+        verify(itemListingRepository, times(1)).findRelatedItems(itemId, Category.ELECTRONICS);
+    }
+
+    @Test
+    void getItemsByCategory() {
+        // Arrange
+        Category category = Category.ELECTRONICS;
+        Item item = new Item();
+        item.setCategory(Category.ELECTRONICS);
+        when(itemListingRepository.findItemsByCategory(category)).thenReturn(java.util.List.of(item));
+
+        // Act
+        List<Item> result = itemListingService.getItemsByCategory(category);
+
+        // Assert
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getCategory()).isEqualTo(Category.ELECTRONICS);
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemsByCategory(category);
+    }
+
+    @Test
+    void generateAndSetUUIDCode() {
+        // Arrange
+        Item item = new Item();
+
+        // Act
+        Item result = itemListingService.generateAndSetUUIDCode(item);
+
+        // Assert
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.getItemId()).isNotNull();
+    }
+
+    @Test
+    void setAvailability() {
+        // Arrange
+        Item item = new Item();
+        item.setQuantity(10);
+
+        // Act
+        itemListingService.setAvailability(item);
+
+        // Assert
+        Assertions.assertThat(item.isAvailable()).isTrue();
+    }
+
+    @Test
+    void setListingDate() {
+        // Arrange
+        Item item = new Item();
+
+        // Act
+        itemListingService.setListingDate(item);
+
+        // Assert
+        Assertions.assertThat(item.getDateListed()).isNotNull();
+        Assertions.assertThat(item.getDateListed()).isInstanceOf(LocalDate.class);
     }
 
 }
