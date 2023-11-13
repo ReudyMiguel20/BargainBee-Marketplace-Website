@@ -133,13 +133,10 @@ class ItemListingControllerTest {
         performCreateNewItem(thirdItemRequest);
     }
 
-    private Item createItemByItemName(String itemName) throws Exception {
+    private ItemInfo createItemByItemName(String itemName) throws Exception {
         String responseString = performCreateNewItem(getNewItemRequest(itemName));
 
-        Item item = objectMapper.readValue(responseString, Item.class);
-
-        return itemListingRepository.findItemByItemId(item.getItemId())
-                .orElseThrow(RuntimeException::new);
+        return objectMapper.readValue(responseString, ItemInfo.class);
     }
 
     /**
@@ -245,14 +242,13 @@ class ItemListingControllerTest {
         NewItemRequest newItemRequest = getNewItemRequest(Category.ELECTRONICS, Condition.NEW);
 
         // Act
-        Item newItem = createItemByItemName(newItemRequest.getItemName());
+        ItemInfo newItem = createItemByItemName(newItemRequest.getItemName());
 
         // Assert
         Assertions.assertThat(itemListingRepository.findAll().size()).isEqualTo(1);
-        Assertions.assertThat(newItem).isInstanceOf(Item.class);
+        Assertions.assertThat(newItem).isInstanceOf(ItemInfo.class);
         Assertions.assertThat(newItem.getItemName()).isEqualTo(newItemRequest.getItemName());
-        Assertions.assertThat(newItem.getId()).isNotNull();
-        Assertions.assertThat(newItem.getId()).isInstanceOf(Long.class);
+        Assertions.assertThat(newItem.getItemId()).isNotNull();
     }
 
     @Test
@@ -297,18 +293,18 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetItemsByCategory();
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
         Assertions.assertThat(items)
                 .hasSize(3)
-                .extracting(Item::getCategory)
+                .extracting(ItemInfo::getCategory)
                 .contains(Category.ELECTRONICS);
 
         Assertions.assertThat(items)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(Item.class));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
 
     @Test
@@ -318,7 +314,7 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetItemsByCategory();
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -326,8 +322,8 @@ class ItemListingControllerTest {
                 .isNotNull();
 
         Assertions.assertThat(items)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(Item.class));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
 
     @Test
@@ -337,7 +333,7 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetItemsByCategory();
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -345,8 +341,8 @@ class ItemListingControllerTest {
                 .isNotEmpty();
 
         Assertions.assertThat(items)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(Item.class));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
 
     @Test
@@ -368,7 +364,7 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetFeaturedItems();
-        List<Item> featuredItems = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> featuredItems = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -376,11 +372,11 @@ class ItemListingControllerTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(1)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(item.getClass()));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
 
         Assertions.assertThat(featuredItems)
-                .extracting(Item::isFeatured)
+                .extracting(ItemInfo::isFeatured)
                 .contains(true);
     }
 
@@ -395,7 +391,7 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetRelatedItems(item);
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -403,53 +399,53 @@ class ItemListingControllerTest {
                 .hasSize(3)
                 .isNotNull()
                 .isNotEmpty()
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(item.getClass()));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
 
         Assertions.assertThat(items)
-                .extracting(Item::getCategory)
+                .extracting(ItemInfo::getCategory)
                 .contains(Category.ELECTRONICS);
     }
 
     @Test
     void shouldReturnItemsMatchingKeyword() throws Exception {
         // Arrange
-        Item firstItem = createItemByItemName("Asus laptop");
-        Item secondItem = createItemByItemName("Laptop NS xf v3");
-        Item thirdItem = createItemByItemName("Big book");
-        Item fourthItem = createItemByItemName("lap top");
+        ItemInfo firstItem = createItemByItemName("Asus laptop");
+        ItemInfo secondItem = createItemByItemName("Laptop NS xf v3");
+        ItemInfo thirdItem = createItemByItemName("Big book");
+        ItemInfo fourthItem = createItemByItemName("lap top");
 
         // Act
         String responseContent = performSearchItemsByKeyword("laptop");
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
         Assertions.assertThat(items.size()).isEqualTo(2);
 
         Assertions.assertThat(items)
-                .extracting(Item::getItemName)
+                .extracting(ItemInfo::getItemName)
                 .contains(firstItem.getItemName(), secondItem.getItemName());
 
         Assertions.assertThat(items)
-                .extracting(Item::getItemName)
+                .extracting(ItemInfo::getItemName)
                 .doesNotContain(thirdItem.getItemName(), fourthItem.getItemName());
 
         Assertions.assertThat(items)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(Item.class));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
 
         Assertions.assertThat(items)
-                .extracting(Item::getItemName)
+                .extracting(ItemInfo::getItemName)
                 .allMatch(itemName -> itemName.toLowerCase().contains("laptop"));
     }
 
     @Test
     void shouldReturnAllItems() throws Exception {
         // Arrange
-        Item firstItem = createItemByItemName("Test Item 1");
-        Item secondItem = createItemByItemName("Test Item 2");
-        Item thirdItem = createItemByItemName("Test Item 3");
+        ItemInfo firstItem = createItemByItemName("Test Item 1");
+        ItemInfo secondItem = createItemByItemName("Test Item 2");
+        ItemInfo thirdItem = createItemByItemName("Test Item 3");
 
         // Act
         String responseContent = performGetAllItems();

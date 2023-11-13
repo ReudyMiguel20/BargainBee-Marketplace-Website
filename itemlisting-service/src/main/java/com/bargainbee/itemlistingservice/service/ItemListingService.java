@@ -11,7 +11,7 @@ import java.util.List;
 public interface ItemListingService {
     ItemInfo createItem(NewItemRequest item);
 
-    List<Item> getItemsByCategory(Category category);
+    List<ItemInfo> getItemsByCategory(Category category);
 
     Item generateAndSetUUIDCode(Item itemToBeListed);
 
@@ -25,13 +25,13 @@ public interface ItemListingService {
 
     void deleteItem(String itemId);
 
-    List<Item> getFeaturedItems();
+    List<ItemInfo> getFeaturedItems();
 
-    List<Item> getRelatedItems(String itemId);
+    List<ItemInfo> getRelatedItems(String itemId);
 
-    List<Item> searchItemsByKeyword(String keyword);
+    List<ItemInfo> searchItemsByKeyword(String keyword);
 
-    List<Item> getAllItems();
+    List<ItemInfo> getAllItems();
 
     ItemInfo getItemByItemId(String itemId);
 }

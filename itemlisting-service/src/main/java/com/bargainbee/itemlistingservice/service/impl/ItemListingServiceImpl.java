@@ -73,20 +73,30 @@ public class ItemListingServiceImpl implements ItemListingService {
     }
 
     @Override
-    public List<Item> getFeaturedItems() {
-        return itemListingRepository.findFeaturedItems();
+    public List<ItemInfo> getFeaturedItems() {
+        return itemListingRepository.findFeaturedItems()
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
     }
 
+    // Handle not returning the item that is being viewed
     @Override
-    public List<Item> getRelatedItems(String itemId) {
+    public List<ItemInfo> getRelatedItems(String itemId) {
         Item item = itemListingRepository.findItemByItemId(itemId).orElseThrow();
         Category category = item.getCategory();
-        return itemListingRepository.findRelatedItems(itemId, category);
+
+        return itemListingRepository.findRelatedItems(itemId, category)
+                .stream()
+                .map(item1 -> modelMapper.map(item1, ItemInfo.class))
+                .toList();
     }
 
     @Override
-    public List<Item> getItemsByCategory(Category category) {
-        return itemListingRepository.findItemsByCategory(category);
+    public List<ItemInfo> getItemsByCategory(Category category) {
+        return itemListingRepository.findItemsByCategory(category).stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
     }
 
     @Override
@@ -127,13 +137,19 @@ public class ItemListingServiceImpl implements ItemListingService {
     }
 
     @Override
-    public List<Item> searchItemsByKeyword(String keyword) {
-        return itemListingRepository.findItemsByItemNameContainingIgnoreCase(keyword);
+    public List<ItemInfo> searchItemsByKeyword(String keyword) {
+        return itemListingRepository.findItemsByItemNameContainingIgnoreCase(keyword)
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
     }
 
     @Override
-    public List<Item> getAllItems() {
-        return itemListingRepository.findAll();
+    public List<ItemInfo> getAllItems() {
+        return itemListingRepository.findAll()
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
     }
 
     @Override
