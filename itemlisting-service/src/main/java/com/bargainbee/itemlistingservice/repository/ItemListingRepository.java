@@ -32,4 +32,7 @@ public interface ItemListingRepository extends JpaRepository<Item, Long>,
     @Query(value = "ALTER SEQUENCE t_items_id_seq RESTART WITH 1", nativeQuery = true)
     void resetSequence();
 
+    List<Item> findItemsByItemNameContainingIgnoreCase(String itemName);
+
+
 }

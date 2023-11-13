@@ -57,6 +57,24 @@ public class ItemListingController {
         return itemListingService.getRelatedItems(itemId);
     }
 
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Item> getSearchItemsByKeyword(@RequestParam("item-name") String itemName) {
+        return itemListingService.searchItemsByKeyword(itemName);
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Item> getAllItems() {
+        return itemListingService.getAllItems();
+    }
+
+    @GetMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ItemInfo getItemByItemId(@PathVariable String itemId) {
+        return itemListingService.getItemByItemId(itemId);
+    }
+
 
 
 

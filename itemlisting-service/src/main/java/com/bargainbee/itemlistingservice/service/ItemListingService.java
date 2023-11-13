@@ -28,4 +28,10 @@ public interface ItemListingService {
     List<Item> getFeaturedItems();
 
     List<Item> getRelatedItems(String itemId);
+
+    List<Item> searchItemsByKeyword(String keyword);
+
+    List<Item> getAllItems();
+
+    ItemInfo getItemByItemId(String itemId);
 }

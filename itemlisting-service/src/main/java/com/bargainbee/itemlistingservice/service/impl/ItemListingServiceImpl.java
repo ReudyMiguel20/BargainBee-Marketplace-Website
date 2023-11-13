@@ -126,5 +126,21 @@ public class ItemListingServiceImpl implements ItemListingService {
         item.setTags(itemUpdatedDto.getTags());
     }
 
+    @Override
+    public List<Item> searchItemsByKeyword(String keyword) {
+        return itemListingRepository.findItemsByItemNameContainingIgnoreCase(keyword);
+    }
 
+    @Override
+    public List<Item> getAllItems() {
+        return itemListingRepository.findAll();
+    }
+
+    @Override
+    public ItemInfo getItemByItemId(String itemId) {
+        Item item = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(RuntimeException::new);
+
+        return modelMapper.map(item, ItemInfo.class);
+    }
 }

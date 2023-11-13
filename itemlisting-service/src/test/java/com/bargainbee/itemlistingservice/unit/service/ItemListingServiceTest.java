@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -227,6 +228,110 @@ class ItemListingServiceTest {
         // Assert
         Assertions.assertThat(item.getDateListed()).isNotNull();
         Assertions.assertThat(item.getDateListed()).isInstanceOf(LocalDate.class);
+    }
+
+    @Test
+    void shouldReturnItemsMatchingKeyword() {
+        // Arrange
+        Item firstItem = Item.builder()
+                .itemName("Asus Laptop")
+                .build();
+
+        Item secondItem = Item.builder()
+                .itemName("The best laptop")
+                .build();
+
+        String keyword = "laptop";
+        List<Item> expectedItems = List.of(firstItem, secondItem);
+
+        when(itemListingRepository.findItemsByItemNameContainingIgnoreCase(keyword)).thenReturn(expectedItems);
+        when(itemListingService.searchItemsByKeyword(keyword)).thenReturn(expectedItems);
+
+        // Act
+        List<Item> result = itemListingService.searchItemsByKeyword(keyword);
+
+        // Assert
+        Assertions.assertThat(result).isNotEmpty();
+        Assertions.assertThat(result.size()).isGreaterThan(0);
+
+        Assertions.assertThat(result)
+                .extracting(Item::getItemName)
+                .contains("Asus Laptop", "The best laptop");
+
+        Assertions.assertThat(result)
+                .extracting(Item::getItemName)
+                .allSatisfy(itemName -> assertThat(itemName.toLowerCase()).contains(keyword.toLowerCase()));
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemsByItemNameContainingIgnoreCase(keyword);
+    }
+
+    @Test
+    void shouldReturnAllItemsInAList() {
+        // Arrange
+        Item firstItem = Item.builder()
+                .itemName("Asus Laptop")
+                .build();
+
+        Item secondItem = Item.builder()
+                .itemName("The best laptop")
+                .build();
+
+        List<Item> expectedItems = List.of(firstItem, secondItem);
+
+        when(itemListingRepository.findAll()).thenReturn(expectedItems);
+        when(itemListingService.getAllItems()).thenReturn(expectedItems);
+
+        // Act
+        List<Item> result = itemListingService.getAllItems();
+
+        // Assert
+        Assertions.assertThat(result).isNotEmpty();
+        Assertions.assertThat(result.size()).isGreaterThan(0);
+
+        Assertions.assertThat(result)
+                .extracting(Item::getItemName)
+                .contains("Asus Laptop", "The best laptop");
+
+        // Verify
+        verify(itemListingRepository, times(1)).findAll();
+    }
+
+    @Test
+    void shouldReturnItemDetails() {
+        // Arrange
+        Item firstItem = Item.builder()
+                .itemId(UUID.randomUUID().toString())
+                .build();
+
+        Item secondItem = Item.builder()
+                .itemId(UUID.randomUUID().toString())
+                .build();
+
+        ItemInfo firstItemInfo = ItemInfo.builder()
+                .itemId(firstItem.getItemId())
+                .build();
+
+        ItemInfo secondItemInfo = ItemInfo.builder()
+                .itemId(secondItem.getItemId())
+                .build();
+
+        when(itemListingRepository.findItemByItemId(firstItem.getItemId())).thenReturn(Optional.of(firstItem));
+        when(itemListingRepository.findItemByItemId(secondItem.getItemId())).thenReturn(Optional.of(secondItem));
+        when(modelMapper.map(firstItem, ItemInfo.class)).thenReturn(firstItemInfo);
+        when(modelMapper.map(secondItem, ItemInfo.class)).thenReturn(secondItemInfo);
+
+        // Act
+        ItemInfo returnedItem = itemListingService.getItemByItemId(secondItem.getItemId());
+
+        // Assert
+        Assertions.assertThat(returnedItem).isNotNull();
+        Assertions.assertThat(returnedItem.getItemId()).isEqualTo(secondItem.getItemId());
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemByItemId(secondItem.getItemId());
+        verify(modelMapper, times(1)).map(secondItem, ItemInfo.class);
+
     }
 
 }

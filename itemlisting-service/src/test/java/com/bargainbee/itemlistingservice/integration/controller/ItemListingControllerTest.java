@@ -1,5 +1,6 @@
 package com.bargainbee.itemlistingservice.integration.controller;
 
+import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
@@ -41,16 +42,16 @@ class ItemListingControllerTest {
             .withDatabaseName("bargainbee_db")
             .withExposedPorts(5432);
 
+    static {
+        postgreSQLContainer.start();
+    }
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
     private ItemListingRepository itemListingRepository;
-
-    static {
-        postgreSQLContainer.start();
-    }
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -75,6 +76,19 @@ class ItemListingControllerTest {
                 .quantity(10)
                 .category(category)
                 .condition(condition)
+                .image("testImage")
+                .tags("testTags")
+                .build();
+    }
+
+    private NewItemRequest getNewItemRequest(String itemName) {
+        return NewItemRequest.builder()
+                .itemName(itemName)
+                .description("testDescription")
+                .price(100.0)
+                .quantity(10)
+                .category(Category.ELECTRONICS)
+                .condition(Condition.NEW)
                 .image("testImage")
                 .tags("testTags")
                 .build();
@@ -119,20 +133,32 @@ class ItemListingControllerTest {
         performCreateNewItem(thirdItemRequest);
     }
 
+    private Item createItemByItemName(String itemName) throws Exception {
+        String responseString = performCreateNewItem(getNewItemRequest(itemName));
+
+        Item item = objectMapper.readValue(responseString, Item.class);
+
+        return itemListingRepository.findItemByItemId(item.getItemId())
+                .orElseThrow(RuntimeException::new);
+    }
+
     /**
      * Helper method to perform a POST request to create a new item
      *
      * @param newItemRequest - DTO containing the new item information
      * @throws Exception - Exception thrown if the POST request fails
      */
-    private void performCreateNewItem(NewItemRequest newItemRequest) throws Exception {
+    private String performCreateNewItem(NewItemRequest newItemRequest) throws Exception {
         String newItemRequestString = objectMapper.writeValueAsString(newItemRequest);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/item/new")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/item/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newItemRequestString))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.itemId").exists());
+                .andExpect(jsonPath("$.itemId").exists())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
     }
 
     /**
@@ -191,6 +217,24 @@ class ItemListingControllerTest {
         return result.getResponse().getContentAsString();
     }
 
+    private String performSearchItemsByKeyword(String itemName) throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/search?item-name=" + itemName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
+    }
+
+    private String performGetAllItems() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
+    }
+
 
     /* Tests */
     //
@@ -201,8 +245,7 @@ class ItemListingControllerTest {
         NewItemRequest newItemRequest = getNewItemRequest(Category.ELECTRONICS, Condition.NEW);
 
         // Act
-        performCreateNewItem(newItemRequest);
-        Item newItem = itemListingRepository.findById(1L).get();
+        Item newItem = createItemByItemName(newItemRequest.getItemName());
 
         // Assert
         Assertions.assertThat(itemListingRepository.findAll().size()).isEqualTo(1);
@@ -345,7 +388,8 @@ class ItemListingControllerTest {
     void shouldReturnThreeRelatedItems() throws Exception {
         // Arrange
         performCreateNewItem(getNewItemRequest(Category.ELECTRONICS, Condition.NEW));
-        Item item = itemListingRepository.findById(1L).get();
+        Item item = itemListingRepository.findById(1L)
+                .orElseThrow(RuntimeException::new);
 
         createThreeItemsSameCategory(Category.ELECTRONICS, Condition.NEW);
 
@@ -365,6 +409,60 @@ class ItemListingControllerTest {
         Assertions.assertThat(items)
                 .extracting(Item::getCategory)
                 .contains(Category.ELECTRONICS);
+    }
+
+    @Test
+    void shouldReturnItemsMatchingKeyword() throws Exception {
+        // Arrange
+        Item firstItem = createItemByItemName("Asus laptop");
+        Item secondItem = createItemByItemName("Laptop NS xf v3");
+        Item thirdItem = createItemByItemName("Big book");
+        Item fourthItem = createItemByItemName("lap top");
+
+        // Act
+        String responseContent = performSearchItemsByKeyword("laptop");
+        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        });
+
+        // Assert
+        Assertions.assertThat(items.size()).isEqualTo(2);
+
+        Assertions.assertThat(items)
+                .extracting(Item::getItemName)
+                .contains(firstItem.getItemName(), secondItem.getItemName());
+
+        Assertions.assertThat(items)
+                .extracting(Item::getItemName)
+                .doesNotContain(thirdItem.getItemName(), fourthItem.getItemName());
+
+        Assertions.assertThat(items)
+                .extracting(Item::getClass)
+                .allMatch(itemClass -> itemClass.equals(Item.class));
+
+        Assertions.assertThat(items)
+                .extracting(Item::getItemName)
+                .allMatch(itemName -> itemName.toLowerCase().contains("laptop"));
+    }
+
+    @Test
+    void shouldReturnAllItems() throws Exception {
+        // Arrange
+        Item firstItem = createItemByItemName("Test Item 1");
+        Item secondItem = createItemByItemName("Test Item 2");
+        Item thirdItem = createItemByItemName("Test Item 3");
+
+        // Act
+        String responseContent = performGetAllItems();
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
+        });
+
+        // Assert
+        Assertions.assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(3)
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
 
 }
