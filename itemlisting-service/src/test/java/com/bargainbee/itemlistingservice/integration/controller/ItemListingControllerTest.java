@@ -1,5 +1,6 @@
 package com.bargainbee.itemlistingservice.integration.controller;
 
+import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
@@ -41,16 +42,16 @@ class ItemListingControllerTest {
             .withDatabaseName("bargainbee_db")
             .withExposedPorts(5432);
 
+    static {
+        postgreSQLContainer.start();
+    }
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
     private ItemListingRepository itemListingRepository;
-
-    static {
-        postgreSQLContainer.start();
-    }
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -75,6 +76,19 @@ class ItemListingControllerTest {
                 .quantity(10)
                 .category(category)
                 .condition(condition)
+                .image("testImage")
+                .tags("testTags")
+                .build();
+    }
+
+    private NewItemRequest getNewItemRequest(String itemName) {
+        return NewItemRequest.builder()
+                .itemName(itemName)
+                .description("testDescription")
+                .price(100.0)
+                .quantity(10)
+                .category(Category.ELECTRONICS)
+                .condition(Condition.NEW)
                 .image("testImage")
                 .tags("testTags")
                 .build();
@@ -119,20 +133,29 @@ class ItemListingControllerTest {
         performCreateNewItem(thirdItemRequest);
     }
 
+    private ItemInfo createItemByItemName(String itemName) throws Exception {
+        String responseString = performCreateNewItem(getNewItemRequest(itemName));
+
+        return objectMapper.readValue(responseString, ItemInfo.class);
+    }
+
     /**
      * Helper method to perform a POST request to create a new item
      *
      * @param newItemRequest - DTO containing the new item information
      * @throws Exception - Exception thrown if the POST request fails
      */
-    private void performCreateNewItem(NewItemRequest newItemRequest) throws Exception {
+    private String performCreateNewItem(NewItemRequest newItemRequest) throws Exception {
         String newItemRequestString = objectMapper.writeValueAsString(newItemRequest);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/item/new")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/item/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newItemRequestString))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.itemId").exists());
+                .andExpect(jsonPath("$.itemId").exists())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
     }
 
     /**
@@ -191,6 +214,36 @@ class ItemListingControllerTest {
         return result.getResponse().getContentAsString();
     }
 
+    private String performSearchItemsByKeyword(String itemName) throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/search?item-name=" + itemName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
+    }
+
+    private String performGetAllItems() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
+    }
+
+    // This method right now has category and condition hardcoded, but it can be changed to take in parameters
+    private String performGetFilteredItems() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/filter")
+                        .param("category", "electronics")
+                        .param("condition", "new")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
+    }
+
 
     /* Tests */
     //
@@ -201,15 +254,13 @@ class ItemListingControllerTest {
         NewItemRequest newItemRequest = getNewItemRequest(Category.ELECTRONICS, Condition.NEW);
 
         // Act
-        performCreateNewItem(newItemRequest);
-        Item newItem = itemListingRepository.findById(1L).get();
+        ItemInfo newItem = createItemByItemName(newItemRequest.getItemName());
 
         // Assert
         Assertions.assertThat(itemListingRepository.findAll().size()).isEqualTo(1);
-        Assertions.assertThat(newItem).isInstanceOf(Item.class);
+        Assertions.assertThat(newItem).isInstanceOf(ItemInfo.class);
         Assertions.assertThat(newItem.getItemName()).isEqualTo(newItemRequest.getItemName());
-        Assertions.assertThat(newItem.getId()).isNotNull();
-        Assertions.assertThat(newItem.getId()).isInstanceOf(Long.class);
+        Assertions.assertThat(newItem.getItemId()).isNotNull();
     }
 
     @Test
@@ -254,18 +305,18 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetItemsByCategory();
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
         Assertions.assertThat(items)
                 .hasSize(3)
-                .extracting(Item::getCategory)
+                .extracting(ItemInfo::getCategory)
                 .contains(Category.ELECTRONICS);
 
         Assertions.assertThat(items)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(Item.class));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
 
     @Test
@@ -275,7 +326,7 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetItemsByCategory();
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -283,8 +334,8 @@ class ItemListingControllerTest {
                 .isNotNull();
 
         Assertions.assertThat(items)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(Item.class));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
 
     @Test
@@ -294,7 +345,7 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetItemsByCategory();
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -302,8 +353,8 @@ class ItemListingControllerTest {
                 .isNotEmpty();
 
         Assertions.assertThat(items)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(Item.class));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
 
     @Test
@@ -325,7 +376,7 @@ class ItemListingControllerTest {
 
         // Act
         String responseContent = performGetFeaturedItems();
-        List<Item> featuredItems = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> featuredItems = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -333,11 +384,11 @@ class ItemListingControllerTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(1)
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(item.getClass()));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
 
         Assertions.assertThat(featuredItems)
-                .extracting(Item::isFeatured)
+                .extracting(ItemInfo::isFeatured)
                 .contains(true);
     }
 
@@ -345,13 +396,14 @@ class ItemListingControllerTest {
     void shouldReturnThreeRelatedItems() throws Exception {
         // Arrange
         performCreateNewItem(getNewItemRequest(Category.ELECTRONICS, Condition.NEW));
-        Item item = itemListingRepository.findById(1L).get();
+        Item item = itemListingRepository.findById(1L)
+                .orElseThrow(RuntimeException::new);
 
         createThreeItemsSameCategory(Category.ELECTRONICS, Condition.NEW);
 
         // Act
         String responseContent = performGetRelatedItems(item);
-        List<Item> items = objectMapper.readValue(responseContent, new TypeReference<List<Item>>() {
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
         });
 
         // Assert
@@ -359,12 +411,104 @@ class ItemListingControllerTest {
                 .hasSize(3)
                 .isNotNull()
                 .isNotEmpty()
-                .extracting(Item::getClass)
-                .allMatch(itemClass -> itemClass.equals(item.getClass()));
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
 
         Assertions.assertThat(items)
-                .extracting(Item::getCategory)
+                .extracting(ItemInfo::getCategory)
                 .contains(Category.ELECTRONICS);
     }
+
+    @Test
+    void shouldReturnItemsMatchingKeyword() throws Exception {
+        // Arrange
+        ItemInfo firstItem = createItemByItemName("Asus laptop");
+        ItemInfo secondItem = createItemByItemName("Laptop NS xf v3");
+        ItemInfo thirdItem = createItemByItemName("Big book");
+        ItemInfo fourthItem = createItemByItemName("lap top");
+
+        // Act
+        String responseContent = performSearchItemsByKeyword("laptop");
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
+        });
+
+        // Assert
+        Assertions.assertThat(items.size()).isEqualTo(2);
+
+        Assertions.assertThat(items)
+                .extracting(ItemInfo::getItemName)
+                .contains(firstItem.getItemName(), secondItem.getItemName());
+
+        Assertions.assertThat(items)
+                .extracting(ItemInfo::getItemName)
+                .doesNotContain(thirdItem.getItemName(), fourthItem.getItemName());
+
+        Assertions.assertThat(items)
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
+
+        Assertions.assertThat(items)
+                .extracting(ItemInfo::getItemName)
+                .allMatch(itemName -> itemName.toLowerCase().contains("laptop"));
+    }
+
+    @Test
+    void shouldReturnAllItems() throws Exception {
+        // Arrange
+        ItemInfo firstItem = createItemByItemName("Test Item 1");
+        ItemInfo secondItem = createItemByItemName("Test Item 2");
+        ItemInfo thirdItem = createItemByItemName("Test Item 3");
+
+        // Act
+        String responseContent = performGetAllItems();
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
+        });
+
+        // Assert
+        Assertions.assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(3)
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
+    }
+
+//    @Test
+//    void shouldReturnFilteredItems() throws Exception {
+//        // Arrange
+//        createThreeItemsSameCategory(Category.ELECTRONICS, Condition.NEW);
+//        createThreeItemsSameCategory(Category.CLOTHING, Condition.LIKE_NEW);
+//
+//        // Act
+//        String responseContent = performGetFilteredItems();
+//        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
+//        });
+//
+//        // Assert
+//        Assertions.assertThat(items)
+//                .isNotNull()
+//                .isNotEmpty()
+//                .hasSize(3)
+//                .extracting(ItemInfo::getClass)
+//                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCategory)
+//                .contains(Category.ELECTRONICS);
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCondition)
+//                .contains(Condition.NEW);
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCategory)
+//                .doesNotContain(Category.CLOTHING);
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCondition)
+//                .doesNotContain(Condition.LIKE_NEW);
+//
+//
+//    }
 
 }

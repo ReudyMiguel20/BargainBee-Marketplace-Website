@@ -4,6 +4,7 @@ import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 import com.bargainbee.itemlistingservice.repository.ItemListingRepository;
 import com.bargainbee.itemlistingservice.service.ItemListingService;
@@ -73,20 +74,30 @@ public class ItemListingServiceImpl implements ItemListingService {
     }
 
     @Override
-    public List<Item> getFeaturedItems() {
-        return itemListingRepository.findFeaturedItems();
+    public List<ItemInfo> getFeaturedItems() {
+        return itemListingRepository.findFeaturedItems()
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
     }
 
+    // Handle not returning the item that is being viewed
     @Override
-    public List<Item> getRelatedItems(String itemId) {
+    public List<ItemInfo> getRelatedItems(String itemId) {
         Item item = itemListingRepository.findItemByItemId(itemId).orElseThrow();
         Category category = item.getCategory();
-        return itemListingRepository.findRelatedItems(itemId, category);
+
+        return itemListingRepository.findRelatedItems(itemId, category)
+                .stream()
+                .map(item1 -> modelMapper.map(item1, ItemInfo.class))
+                .toList();
     }
 
     @Override
-    public List<Item> getItemsByCategory(Category category) {
-        return itemListingRepository.findItemsByCategory(category);
+    public List<ItemInfo> getItemsByCategory(Category category) {
+        return itemListingRepository.findItemsByCategory(category).stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
     }
 
     @Override
@@ -126,5 +137,66 @@ public class ItemListingServiceImpl implements ItemListingService {
         item.setTags(itemUpdatedDto.getTags());
     }
 
+    @Override
+    public List<ItemInfo> searchItemsByKeyword(String keyword) {
+        return itemListingRepository.findItemsByItemNameContainingIgnoreCase(keyword)
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
+    }
 
+    @Override
+    public List<ItemInfo> getAllItems() {
+        return itemListingRepository.findAll()
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
+    }
+
+    @Override
+    public ItemInfo getItemByItemId(String itemId) {
+        Item item = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(RuntimeException::new);
+
+        return modelMapper.map(item, ItemInfo.class);
+    }
+
+    @Override
+    public List<ItemInfo> getItemsByPriceBetween(double minPrice, double maxPrice) {
+        return itemListingRepository.findItemsByPriceBetween(minPrice, maxPrice)
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
+    }
+
+    @Override
+    public List<ItemInfo> getFilteredItems(String itemName, String categoryString, String conditionString, int minQuantity, int maxQuantity, double minPrice, double maxPrice, boolean featured) {
+        itemName = assignItemNameOrNull(itemName);
+        Category category = convertStringToCategory(categoryString);
+        Condition condition = convertStringToCondition(conditionString);
+
+        return itemListingRepository.findFilteredItems(itemName, category, condition, minQuantity, maxQuantity, minPrice, maxPrice, featured)
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
+    }
+
+    public Category convertStringToCategory(String categoryString) {
+        if (categoryString.isEmpty()) return null;
+
+        categoryString = categoryString.toUpperCase();
+        return Category.valueOf(categoryString);
+    }
+
+    public Condition convertStringToCondition(String conditionString) {
+        if (conditionString.isEmpty()) return null;
+
+        conditionString = conditionString.toUpperCase();
+        return Condition.valueOf(conditionString);
+    }
+
+    public String assignItemNameOrNull(String itemName) {
+        if (itemName.isEmpty()) return null;
+        return itemName;
+    }
 }

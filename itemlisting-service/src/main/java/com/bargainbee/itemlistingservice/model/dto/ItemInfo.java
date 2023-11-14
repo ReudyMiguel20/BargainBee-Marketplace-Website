@@ -23,6 +23,8 @@ public class ItemInfo {
     @JsonProperty(value = "item_name")
     private String itemName;
 
+    private String description;
+
     private double price;
 
     private int quantity;
@@ -36,6 +38,8 @@ public class ItemInfo {
     private String image;
 
     private boolean available;
+
+    private boolean featured;
 
     @JsonProperty(value = "date_listed")
     private LocalDate dateListed;

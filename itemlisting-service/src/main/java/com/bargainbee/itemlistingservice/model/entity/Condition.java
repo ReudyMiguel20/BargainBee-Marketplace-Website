@@ -5,5 +5,5 @@ public enum Condition {
     LIKE_NEW,
     ACCEPTABLE,
     DEFECTIVE,
-    REFURBISHED
+    REFURBISHED,
 }
