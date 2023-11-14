@@ -4,7 +4,6 @@ import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
-import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 
 import java.util.List;

@@ -152,7 +152,7 @@ class ItemListingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newItemRequestString))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.itemId").exists())
+                .andExpect(jsonPath("$.item_id").exists())
                 .andReturn();
 
         return result.getResponse().getContentAsString();
@@ -172,7 +172,7 @@ class ItemListingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(itemUpdatedRequestString))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.itemId").exists());
+                .andExpect(jsonPath("$.item_id").exists());
     }
 
     /**

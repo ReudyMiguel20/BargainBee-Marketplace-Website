@@ -1,5 +1,6 @@
 package com.bargainbee.itemlistingservice.unit.service;
 
+import com.bargainbee.itemlistingservice.exception.ItemNotFoundException;
 import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
@@ -117,6 +118,27 @@ class ItemListingServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionOnMissingItemId() {
+        // Arrange
+        String itemId = UUID.randomUUID().toString();
+        Item itemToUpdate = new Item();
+        ItemUpdatedDto itemUpdatedDto = new ItemUpdatedDto();
+        ItemInfo mockedUpdatedItemInfo = new ItemInfo();
+
+        // Act
+        when(itemListingRepository.findItemByItemId(itemId)).thenReturn(Optional.empty());
+
+        // Assert
+        Assertions.assertThatThrownBy(() -> itemListingService.updateItem(itemId, itemUpdatedDto))
+                .isInstanceOf(ItemNotFoundException.class);
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemByItemId(itemId);
+        verify(itemListingRepository, times(0)).save(itemToUpdate);
+        verify(modelMapper, times(0)).map(itemToUpdate, ItemInfo.class);
+    }
+
+    @Test
     void deleteItem() {
         // Arrange
         String itemId = UUID.randomUUID().toString();
@@ -130,6 +152,25 @@ class ItemListingServiceTest {
         // Verify
         verify(itemListingRepository, times(1)).findItemByItemId(itemId);
         verify(itemListingRepository, times(1)).delete(itemToDelete);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenMissingItemIdDeleteItem() {
+        // Arrange
+        String itemId = UUID.randomUUID().toString();
+        Item itemToDelete = new Item();
+
+        when(itemListingRepository.findItemByItemId(itemId)).thenReturn(Optional.empty());
+
+        // Act
+
+        // Assert
+        Assertions.assertThatThrownBy(() -> itemListingService.deleteItem(itemId))
+                .isInstanceOf(ItemNotFoundException.class);
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemByItemId(itemId);
+        verify(itemListingRepository, times(0)).delete(itemToDelete);
     }
 
     @Test
@@ -586,6 +627,54 @@ class ItemListingServiceTest {
         verify(modelMapper, times(1)).map(secondItem, ItemInfo.class);
         verify(modelMapper, times(1)).map(thirdItem, ItemInfo.class);
 
+    }
+
+    @Test
+    void shouldConvertStringToCategory() {
+        // Arrange
+        String categoryString = "vehicles";
+
+        // Act
+        Category result = itemListingService.convertStringToCategory(categoryString);
+
+        // Assert
+        Assertions.assertThat(result).isEqualTo(Category.VEHICLES);
+    }
+
+    @Test
+    void shouldConvertStringToCondition() {
+        // Arrange
+        String conditionString = "like_new";
+
+        // Act
+        Condition result = itemListingService.convertStringToCondition(conditionString);
+
+        // Assert
+        Assertions.assertThat(result).isEqualTo(Condition.LIKE_NEW);
+    }
+
+    @Test
+    void shouldAssignItemNameNull() {
+        // Arrange
+        String itemName = "";
+
+        // Act
+        String result = itemListingService.assignItemNameOrNull(itemName);
+
+        // Assert
+        Assertions.assertThat(result).isNull();
+    }
+
+    @Test
+    void shouldAssignItemName() {
+        // Arrange
+        String itemName = "laptop";
+
+        // Act
+        String result = itemListingService.assignItemNameOrNull(itemName);
+
+        // Assert
+        Assertions.assertThat(result).isEqualTo(itemName);
     }
 
 }

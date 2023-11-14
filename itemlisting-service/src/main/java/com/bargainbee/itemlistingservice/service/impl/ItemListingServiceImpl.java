@@ -1,5 +1,6 @@
 package com.bargainbee.itemlistingservice.service.impl;
 
+import com.bargainbee.itemlistingservice.exception.ItemNotFoundException;
 import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
@@ -52,7 +53,8 @@ public class ItemListingServiceImpl implements ItemListingService {
      */
     @Override
     public ItemInfo updateItem(String itemId, ItemUpdatedDto itemUpdatedDto) {
-        Item itemToUpdate = itemListingRepository.findItemByItemId(itemId).orElseThrow();
+        Item itemToUpdate = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(ItemNotFoundException::new);
 
         updateItemValues(itemToUpdate, itemUpdatedDto);
         itemListingRepository.save(itemToUpdate);
@@ -68,8 +70,9 @@ public class ItemListingServiceImpl implements ItemListingService {
      */
     @Override
     public void deleteItem(String itemId) {
-        //Throw an error here if the item does not exist
-        Item itemToDelete = itemListingRepository.findItemByItemId(itemId).orElseThrow();
+        Item itemToDelete = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(ItemNotFoundException::new);
+
         itemListingRepository.delete(itemToDelete);
     }
 
@@ -84,7 +87,9 @@ public class ItemListingServiceImpl implements ItemListingService {
     // Handle not returning the item that is being viewed
     @Override
     public List<ItemInfo> getRelatedItems(String itemId) {
-        Item item = itemListingRepository.findItemByItemId(itemId).orElseThrow();
+        Item item = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(ItemNotFoundException::new);
+
         Category category = item.getCategory();
 
         return itemListingRepository.findRelatedItems(itemId, category)
@@ -109,8 +114,6 @@ public class ItemListingServiceImpl implements ItemListingService {
 
     @Override
     public void setAvailability(Item item) {
-        // Maybe throw an exception here because in order to list
-        // greater than 1 an item it must have a quantity
         item.setAvailable(item.getQuantity() >= 1);
     }
 
@@ -156,7 +159,7 @@ public class ItemListingServiceImpl implements ItemListingService {
     @Override
     public ItemInfo getItemByItemId(String itemId) {
         Item item = itemListingRepository.findItemByItemId(itemId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ItemNotFoundException::new);
 
         return modelMapper.map(item, ItemInfo.class);
     }
