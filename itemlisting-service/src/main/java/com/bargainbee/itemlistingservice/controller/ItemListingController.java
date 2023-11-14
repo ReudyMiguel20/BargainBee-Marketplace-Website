@@ -6,8 +6,10 @@ import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.service.ItemListingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class ItemListingController {
     // Remember to get the user email/name from the request header
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemInfo createItemPost(@RequestBody NewItemRequest item) {
+    public ItemInfo createItemPost(@Valid @RequestBody NewItemRequest item) {
         return itemListingService.createItem(item);
     }
 

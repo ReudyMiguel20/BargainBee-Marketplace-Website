@@ -57,7 +57,9 @@ class ItemListingServiceTest {
         ItemInfo result = itemListingService.createItem(newItemRequest);
 
         // Assert
-        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result)
+                .isNotNull();
+
         verify(itemListingRepository, times(1)).save(mockedItem);
         verify(modelMapper, times(1)).map(newItemRequest, Item.class);
         verify(modelMapper, times(1)).map(mockedItem, ItemInfo.class);
