@@ -4,6 +4,7 @@ import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 
 import java.util.List;
@@ -34,4 +35,8 @@ public interface ItemListingService {
     List<ItemInfo> getAllItems();
 
     ItemInfo getItemByItemId(String itemId);
+
+    List<ItemInfo> getItemsByPriceBetween(double minPrice, double maxPrice);
+
+    List<ItemInfo> getFilteredItems(String itemName, String categoryString, String conditionString, int minQuantity, int maxQuantity, double minPrice, double maxPrice, boolean featured);
 }

@@ -1,11 +1,13 @@
 package com.bargainbee.itemlistingservice.repository;
 
 import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,5 +36,24 @@ public interface ItemListingRepository extends JpaRepository<Item, Long>,
 
     List<Item> findItemsByItemNameContainingIgnoreCase(String itemName);
 
+    List<Item> findItemsByPriceBetween(double minPrice, double maxPrice);
 
+    @Query("SELECT i FROM Item i WHERE " +
+            "(:category is null OR i.category = :category) " +
+            "AND (:condition is null OR i.condition = :condition) " +
+            "AND (:itemName is null OR lower(i.itemName) LIKE lower(concat('%', :itemName, '%'))) " +
+            "AND (:minQuantity is null OR i.quantity >= :minQuantity) " +
+            "AND (:maxQuantity is null OR i.quantity <= :maxQuantity) " +
+            "AND i.price BETWEEN :minPrice AND :maxPrice " +
+            "AND (:featured is null OR i.featured = :featured)")
+    List<Item> findFilteredItems(
+            @Param("itemName") String itemName,
+            @Param("category") Category category,
+            @Param("condition") Condition condition,
+            @Param("minQuantity") Integer minQuantity,
+            @Param("maxQuantity") Integer maxQuantity,
+            @Param("minPrice") double minPrice,
+            @Param("maxPrice") double maxPrice,
+            @Param("featured") Boolean featured
+    );
 }

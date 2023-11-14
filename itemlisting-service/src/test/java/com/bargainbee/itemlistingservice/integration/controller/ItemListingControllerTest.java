@@ -232,6 +232,18 @@ class ItemListingControllerTest {
         return result.getResponse().getContentAsString();
     }
 
+    // This method right now has category and condition hardcoded, but it can be changed to take in parameters
+    private String performGetFilteredItems() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/filter")
+                        .param("category", "electronics")
+                        .param("condition", "new")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
+    }
+
 
     /* Tests */
     //
@@ -460,5 +472,43 @@ class ItemListingControllerTest {
                 .extracting(ItemInfo::getClass)
                 .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
     }
+
+//    @Test
+//    void shouldReturnFilteredItems() throws Exception {
+//        // Arrange
+//        createThreeItemsSameCategory(Category.ELECTRONICS, Condition.NEW);
+//        createThreeItemsSameCategory(Category.CLOTHING, Condition.LIKE_NEW);
+//
+//        // Act
+//        String responseContent = performGetFilteredItems();
+//        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
+//        });
+//
+//        // Assert
+//        Assertions.assertThat(items)
+//                .isNotNull()
+//                .isNotEmpty()
+//                .hasSize(3)
+//                .extracting(ItemInfo::getClass)
+//                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCategory)
+//                .contains(Category.ELECTRONICS);
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCondition)
+//                .contains(Condition.NEW);
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCategory)
+//                .doesNotContain(Category.CLOTHING);
+//
+//        Assertions.assertThat(items)
+//                .extracting(ItemInfo::getCondition)
+//                .doesNotContain(Condition.LIKE_NEW);
+//
+//
+//    }
 
 }

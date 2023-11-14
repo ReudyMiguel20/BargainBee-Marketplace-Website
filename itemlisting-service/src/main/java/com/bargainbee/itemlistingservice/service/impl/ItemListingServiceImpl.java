@@ -4,6 +4,7 @@ import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
+import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 import com.bargainbee.itemlistingservice.repository.ItemListingRepository;
 import com.bargainbee.itemlistingservice.service.ItemListingService;
@@ -158,5 +159,44 @@ public class ItemListingServiceImpl implements ItemListingService {
                 .orElseThrow(RuntimeException::new);
 
         return modelMapper.map(item, ItemInfo.class);
+    }
+
+    @Override
+    public List<ItemInfo> getItemsByPriceBetween(double minPrice, double maxPrice) {
+        return itemListingRepository.findItemsByPriceBetween(minPrice, maxPrice)
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
+    }
+
+    @Override
+    public List<ItemInfo> getFilteredItems(String itemName, String categoryString, String conditionString, int minQuantity, int maxQuantity, double minPrice, double maxPrice, boolean featured) {
+        itemName = assignItemNameOrNull(itemName);
+        Category category = convertStringToCategory(categoryString);
+        Condition condition = convertStringToCondition(conditionString);
+
+        return itemListingRepository.findFilteredItems(itemName, category, condition, minQuantity, maxQuantity, minPrice, maxPrice, featured)
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
+    }
+
+    public Category convertStringToCategory(String categoryString) {
+        if (categoryString.isEmpty()) return null;
+
+        categoryString = categoryString.toUpperCase();
+        return Category.valueOf(categoryString);
+    }
+
+    public Condition convertStringToCondition(String conditionString) {
+        if (conditionString.isEmpty()) return null;
+
+        conditionString = conditionString.toUpperCase();
+        return Condition.valueOf(conditionString);
+    }
+
+    public String assignItemNameOrNull(String itemName) {
+        if (itemName.isEmpty()) return null;
+        return itemName;
     }
 }
