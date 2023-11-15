@@ -5,11 +5,14 @@ import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Item;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 
 public interface ItemListingService {
     ItemInfo createItem(NewItemRequest item);
+
+    ItemInfo createItem(NewItemRequest item, String token) throws JsonProcessingException;
 
     List<ItemInfo> getItemsByCategory(Category category);
 
@@ -21,9 +24,13 @@ public interface ItemListingService {
 
     ItemInfo updateItem(String itemId, ItemUpdatedDto itemUpdatedDto);
 
+    ItemInfo updateItem(String itemId, ItemUpdatedDto itemUpdatedDto, String token) throws JsonProcessingException;
+
     void updateItemValues(Item item, ItemUpdatedDto itemUpdatedDto);
 
     void deleteItem(String itemId);
+
+    void deleteItem(String itemId, String token) throws JsonProcessingException;
 
     List<ItemInfo> getFeaturedItems();
 

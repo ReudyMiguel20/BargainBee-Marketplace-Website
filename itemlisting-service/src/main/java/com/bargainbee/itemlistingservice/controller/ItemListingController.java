@@ -5,8 +5,10 @@ import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.service.ItemListingService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,23 +21,32 @@ public class ItemListingController {
 
     private final ItemListingService itemListingService;
 
-    // Remember to get the user email/name from the request header
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemInfo createItemPost(@Valid @RequestBody NewItemRequest item) {
-        return itemListingService.createItem(item);
+    public ItemInfo createItemPost(
+            @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @Valid @RequestBody NewItemRequest item
+    ) throws JsonProcessingException {
+        return itemListingService.createItem(item, authorizationHeader);
     }
 
     @PutMapping("/update/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemInfo updateItem(@PathVariable String itemId, @RequestBody ItemUpdatedDto itemUpdatedDto) {
-        return itemListingService.updateItem(itemId, itemUpdatedDto);
+    public ItemInfo updateItem(
+            @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @PathVariable String itemId,
+            @RequestBody ItemUpdatedDto itemUpdatedDto
+    ) throws JsonProcessingException {
+        return itemListingService.updateItem(itemId, itemUpdatedDto, authorizationHeader);
     }
 
     @DeleteMapping("/delete/{itemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteItem(@PathVariable String itemId) {
-        itemListingService.deleteItem(itemId);
+    public void deleteItem(
+            @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @PathVariable String itemId
+    ) throws JsonProcessingException {
+        itemListingService.deleteItem(itemId, authorizationHeader);
     }
 
     @GetMapping("/category/{categoryName}")
@@ -77,8 +88,10 @@ public class ItemListingController {
 
     @GetMapping("/price")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemInfo> getItemsByPriceBetween(@RequestParam("min-price") double minPrice,
-                                                 @RequestParam("max-price") double maxPrice) {
+    public List<ItemInfo> getItemsByPriceBetween(
+            @RequestParam("min-price") double minPrice,
+            @RequestParam("max-price") double maxPrice
+    ) {
         return itemListingService.getItemsByPriceBetween(minPrice, maxPrice);
     }
 

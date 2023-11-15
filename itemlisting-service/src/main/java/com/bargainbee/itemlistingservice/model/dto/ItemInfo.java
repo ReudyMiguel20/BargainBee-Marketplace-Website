@@ -2,6 +2,7 @@ package com.bargainbee.itemlistingservice.model.dto;
 
 import com.bargainbee.itemlistingservice.model.entity.Category;
 import com.bargainbee.itemlistingservice.model.entity.Condition;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -52,7 +53,9 @@ public class ItemInfo {
     @NotNull(message = "Condition cannot be null")
     private Condition condition;
 
-    // private User seller;
+    @NotEmpty(message = "Seller cannot be empty")
+    @NotNull(message = "Seller cannot be null")
+    private String seller;
 
     @NotEmpty(message = "Image cannot be empty")
     @NotNull(message = "Image cannot be null")
@@ -69,6 +72,7 @@ public class ItemInfo {
     @JsonProperty(value = "date_listed")
     @NotNull(message = "Date listed cannot be null")
     @NotEmpty(message = "Date listed cannot be empty")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateListed;
 
     @NotNull(message = "Tags cannot be null")

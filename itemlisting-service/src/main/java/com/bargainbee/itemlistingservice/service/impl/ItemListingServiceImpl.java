@@ -1,6 +1,8 @@
 package com.bargainbee.itemlistingservice.service.impl;
 
+import com.bargainbee.itemlistingservice.common.misc.JwtDecoder;
 import com.bargainbee.itemlistingservice.exception.ItemNotFoundException;
+import com.bargainbee.itemlistingservice.exception.UnauthorizedItemModificationException;
 import com.bargainbee.itemlistingservice.model.dto.ItemInfo;
 import com.bargainbee.itemlistingservice.model.dto.ItemUpdatedDto;
 import com.bargainbee.itemlistingservice.model.dto.NewItemRequest;
@@ -9,6 +11,7 @@ import com.bargainbee.itemlistingservice.model.entity.Condition;
 import com.bargainbee.itemlistingservice.model.entity.Item;
 import com.bargainbee.itemlistingservice.repository.ItemListingRepository;
 import com.bargainbee.itemlistingservice.service.ItemListingService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class ItemListingServiceImpl implements ItemListingService {
 
     private final ItemListingRepository itemListingRepository;
     private final ModelMapper modelMapper;
+    private final JwtDecoder jwtDecoder;
 
     /**
      * Creates a new item and saves it to the database
@@ -35,6 +39,21 @@ public class ItemListingServiceImpl implements ItemListingService {
         Item newItem = modelMapper.map(newItemRequest, Item.class);
 
         // Set respective values to the item
+        generateAndSetUUIDCode(newItem);
+        setAvailability(newItem);
+        setListingDate(newItem);
+
+        itemListingRepository.save(newItem);
+
+        return modelMapper.map(newItem, ItemInfo.class);
+    }
+
+    @Override
+    public ItemInfo createItem(NewItemRequest newItemRequest, String token) throws JsonProcessingException {
+        Item newItem = modelMapper.map(newItemRequest, Item.class);
+
+        // Set respective values to the item
+        setSeller(newItem, jwtDecoder.decodeJwtAndGetUsername(token));
         generateAndSetUUIDCode(newItem);
         setAvailability(newItem);
         setListingDate(newItem);
@@ -62,6 +81,20 @@ public class ItemListingServiceImpl implements ItemListingService {
         return modelMapper.map(itemToUpdate, ItemInfo.class);
     }
 
+    @Override
+    public ItemInfo updateItem(String itemId, ItemUpdatedDto itemUpdatedDto, String token) throws JsonProcessingException {
+        Item itemToUpdate = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(ItemNotFoundException::new);
+
+        // Verify that the user is the seller of the item
+        verifySeller(itemToUpdate, jwtDecoder.decodeJwtAndGetUsername(token));
+
+        updateItemValues(itemToUpdate, itemUpdatedDto);
+        itemListingRepository.save(itemToUpdate);
+
+        return modelMapper.map(itemToUpdate, ItemInfo.class);
+    }
+
     /**
      * Deletes an existing item from the database with the provided item ID and returns a status message
      *
@@ -72,6 +105,17 @@ public class ItemListingServiceImpl implements ItemListingService {
     public void deleteItem(String itemId) {
         Item itemToDelete = itemListingRepository.findItemByItemId(itemId)
                 .orElseThrow(ItemNotFoundException::new);
+
+        itemListingRepository.delete(itemToDelete);
+    }
+
+    @Override
+    public void deleteItem(String itemId, String token) throws JsonProcessingException {
+        Item itemToDelete = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(ItemNotFoundException::new);
+
+        // Verify that the user is the seller of the item
+        verifySeller(itemToDelete, jwtDecoder.decodeJwtAndGetUsername(token));
 
         itemListingRepository.delete(itemToDelete);
     }
@@ -201,5 +245,15 @@ public class ItemListingServiceImpl implements ItemListingService {
     public String assignItemNameOrNull(String itemName) {
         if (itemName.isEmpty()) return null;
         return itemName;
+    }
+
+    public void setSeller(Item item, String username) {
+        item.setSeller(username);
+    }
+
+    public void verifySeller(Item item, String username) {
+        if (!item.getSeller().equals(username)) {
+            throw new UnauthorizedItemModificationException();
+        }
     }
 }

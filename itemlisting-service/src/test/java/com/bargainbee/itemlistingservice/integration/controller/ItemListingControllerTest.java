@@ -13,8 +13,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -52,6 +54,8 @@ class ItemListingControllerTest {
     private ObjectMapper objectMapper;
     @Autowired
     private ItemListingRepository itemListingRepository;
+    @Value("${json.key}")
+    private String authorizationHeader;
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -150,6 +154,7 @@ class ItemListingControllerTest {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/item/new")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .content(newItemRequestString))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.item_id").exists())
@@ -169,6 +174,7 @@ class ItemListingControllerTest {
         String itemUpdatedRequestString = objectMapper.writeValueAsString(itemUpdatedDto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/item/update/" + itemToUpdate.getItemId())
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(itemUpdatedRequestString))
                 .andExpect(status().isOk())
@@ -183,12 +189,14 @@ class ItemListingControllerTest {
      */
     private void performDeleteItem(Item itemToDelete) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/item/delete/" + itemToDelete.getItemId())
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 
     private String performGetItemsByCategory() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/category/" + "electronics")
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -198,6 +206,7 @@ class ItemListingControllerTest {
 
     private String performGetFeaturedItems() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/featured")
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -207,6 +216,7 @@ class ItemListingControllerTest {
 
     private String performGetRelatedItems(Item item) throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/related/" + item.getItemId())
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -216,6 +226,7 @@ class ItemListingControllerTest {
 
     private String performSearchItemsByKeyword(String itemName) throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/search?item-name=" + itemName)
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -225,6 +236,7 @@ class ItemListingControllerTest {
 
     private String performGetAllItems() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/all")
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -235,6 +247,7 @@ class ItemListingControllerTest {
     // This method right now has category and condition hardcoded, but it can be changed to take in parameters
     private String performGetFilteredItems() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/filter")
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                         .param("category", "electronics")
                         .param("condition", "new")
                         .contentType(MediaType.APPLICATION_JSON))

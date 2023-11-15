@@ -1,5 +1,6 @@
 package com.bargainbee.itemlistingservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,7 +38,7 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private Condition condition;
 
-//    private User seller;
+    private String seller;
 
     private String image;
 
@@ -46,6 +47,7 @@ public class Item {
     private boolean featured;
 
     @JsonProperty(value = "date_listed")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateListed;
 
     private String tags;

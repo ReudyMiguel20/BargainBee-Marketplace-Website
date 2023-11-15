@@ -1,6 +1,7 @@
 package com.bargainbee.itemlistingservice.common.exceptionhandler;
 
 import com.bargainbee.itemlistingservice.exception.ItemNotFoundException;
+import com.bargainbee.itemlistingservice.exception.UnauthorizedItemModificationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,21 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.toString(),
                 "The item you are looking for does not exist. Please check the item id and try again.",
+                path
+        );
+    }
+
+    @ExceptionHandler(value = {UnauthorizedItemModificationException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public CustomErrorMessage handleUnauthorizedItemModification(HttpServletRequest request, UnauthorizedItemModificationException ex) {
+        String path = request.getRequestURI();
+
+        //Creating the body of the response
+        return new CustomErrorMessage(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.toString(),
+                "You are not authorized to modify this item. Please check the item id and try again.",
                 path
         );
     }
