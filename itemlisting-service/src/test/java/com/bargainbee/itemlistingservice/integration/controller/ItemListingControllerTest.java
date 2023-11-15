@@ -257,6 +257,16 @@ class ItemListingControllerTest {
         return result.getResponse().getContentAsString();
     }
 
+    private String performGetItemsBySeller() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/item/seller/" + "Test Admin")
+                        .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return result.getResponse().getContentAsString();
+    }
+
 
     /* Tests */
     //
@@ -484,6 +494,48 @@ class ItemListingControllerTest {
                 .hasSize(3)
                 .extracting(ItemInfo::getClass)
                 .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
+    }
+
+    @Test
+    void shouldReturnItemsFromSpecificSeller() throws Exception {
+        // Arrange
+        Item firstItem = Item.builder()
+                .seller("Test Admin")
+                .build();
+
+        Item secondItem = Item.builder()
+                .seller("Test Admin")
+                .build();
+
+        Item thirdItem = Item.builder()
+                .seller("Test No One")
+                .build();
+
+        itemListingRepository.save(firstItem);
+        itemListingRepository.save(secondItem);
+        itemListingRepository.save(thirdItem);
+
+        // Act
+        String responseContent = performGetItemsBySeller();
+        List<ItemInfo> items = objectMapper.readValue(responseContent, new TypeReference<List<ItemInfo>>() {
+        });
+
+        // Assert
+        Assertions.assertThat(items)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(2)
+                .extracting(ItemInfo::getClass)
+                .allMatch(itemClass -> itemClass.equals(ItemInfo.class));
+
+        Assertions.assertThat(items)
+                .extracting(ItemInfo::getSeller)
+                .contains("Test Admin");
+
+        Assertions.assertThat(items)
+                .extracting(ItemInfo::getSeller)
+                .doesNotContain("Test No One");
+
     }
 
 //    @Test

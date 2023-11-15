@@ -45,4 +45,8 @@ public interface ItemListingService {
     List<ItemInfo> getItemsByPriceBetween(double minPrice, double maxPrice);
 
     List<ItemInfo> getFilteredItems(String itemName, String categoryString, String conditionString, int minQuantity, int maxQuantity, double minPrice, double maxPrice, boolean featured);
+
+    List<ItemInfo> getItemsBySeller(String seller);
+
+    void updateItemQuantity(String itemId, int quantity);
 }

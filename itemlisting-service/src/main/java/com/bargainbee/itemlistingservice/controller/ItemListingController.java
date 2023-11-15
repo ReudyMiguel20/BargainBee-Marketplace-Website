@@ -119,4 +119,10 @@ public class ItemListingController {
         );
     }
 
+    @GetMapping("/seller/{seller}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemInfo> getItemsBySeller(@PathVariable String seller) {
+        return itemListingService.getItemsBySeller(seller);
+    }
+
 }

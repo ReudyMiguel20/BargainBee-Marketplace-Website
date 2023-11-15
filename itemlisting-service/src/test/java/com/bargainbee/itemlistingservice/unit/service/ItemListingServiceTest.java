@@ -677,4 +677,69 @@ class ItemListingServiceTest {
         Assertions.assertThat(result).isEqualTo(itemName);
     }
 
+    @Test
+    void shouldReturnListWithItemsFromSeller() {
+        // Arrange
+        Item firstItem = Item.builder()
+                .seller("seller")
+                .build();
+
+        Item secondItem = Item.builder()
+                .seller("seller")
+                .build();
+
+        Item thirdItem = Item.builder()
+                .seller("another seller")
+                .build();
+
+        when(itemListingRepository.findItemsBySeller("seller")).thenReturn(List.of(firstItem, secondItem));
+        when(modelMapper.map(firstItem, ItemInfo.class)).thenReturn(ItemInfo.builder().seller("seller").build());
+        when(modelMapper.map(secondItem, ItemInfo.class)).thenReturn(ItemInfo.builder().seller("seller").build());
+
+        // Act
+        List<ItemInfo> result = itemListingService.getItemsBySeller("seller");
+
+        // Assert
+        Assertions.assertThat(result)
+                .isNotEmpty()
+                .hasSize(2);
+
+        Assertions.assertThat(result)
+                .extracting(ItemInfo::getSeller)
+                .allMatch(sellerName -> sellerName.equals("seller"));
+
+        Assertions.assertThat(result)
+                .extracting(ItemInfo::getClass)
+                .allMatch(ItemInfo ->ItemInfo.equals(ItemInfo.class));
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemsBySeller("seller");
+        verify(modelMapper, times(1)).map(firstItem, ItemInfo.class);
+        verify(modelMapper, times(1)).map(secondItem, ItemInfo.class);
+        verify(modelMapper, times(0)).map(thirdItem, ItemInfo.class);
+    }
+
+    @Test
+    void shouldUpdateItemQuantity() {
+        // Arrange
+        Item item = Item.builder()
+                .itemId(UUID.randomUUID().toString())
+                .quantity(10)
+                .build();
+
+        when(itemListingRepository.findItemByItemId(item.getItemId())).thenReturn(Optional.of(item));
+        when(itemListingRepository.save(item)).thenReturn(item);
+
+        // Act
+        itemListingService.updateItemQuantity(item.getItemId(), 5);
+
+        // Assert
+        Assertions.assertThat(item.getQuantity()).isEqualTo(5);
+
+        // Verify
+        verify(itemListingRepository, times(1)).findItemByItemId(item.getItemId());
+        verify(itemListingRepository, times(1)).save(item);
+
+    }
+
 }

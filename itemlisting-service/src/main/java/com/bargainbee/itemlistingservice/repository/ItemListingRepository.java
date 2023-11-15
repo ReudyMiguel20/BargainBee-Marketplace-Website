@@ -56,4 +56,6 @@ public interface ItemListingRepository extends JpaRepository<Item, Long>,
             @Param("maxPrice") double maxPrice,
             @Param("featured") Boolean featured
     );
+
+    List<Item> findItemsBySeller(String seller);
 }

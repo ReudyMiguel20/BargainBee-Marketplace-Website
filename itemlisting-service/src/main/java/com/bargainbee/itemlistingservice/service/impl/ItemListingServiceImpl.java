@@ -228,6 +228,14 @@ public class ItemListingServiceImpl implements ItemListingService {
                 .toList();
     }
 
+    @Override
+    public List<ItemInfo> getItemsBySeller(String seller) {
+        return itemListingRepository.findItemsBySeller(seller)
+                .stream()
+                .map(item -> modelMapper.map(item, ItemInfo.class))
+                .toList();
+    }
+
     public Category convertStringToCategory(String categoryString) {
         if (categoryString.isEmpty()) return null;
 
@@ -255,5 +263,15 @@ public class ItemListingServiceImpl implements ItemListingService {
         if (!item.getSeller().equals(username)) {
             throw new UnauthorizedItemModificationException();
         }
+    }
+
+    @Override
+    public void updateItemQuantity(String itemId, int quantity) {
+        Item itemToUpdate = itemListingRepository.findItemByItemId(itemId)
+                .orElseThrow(ItemNotFoundException::new);
+
+        itemToUpdate.setQuantity(quantity);
+
+        itemListingRepository.save(itemToUpdate);
     }
 }
