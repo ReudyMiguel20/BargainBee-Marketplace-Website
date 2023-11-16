@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppNavbar from "./components/AppNavbar/AppNavbar";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import {Home} from "./pages/Home.js";
-import { Products } from "./pages/Products.js";
+import { Products } from "./pages/Products/Products.js";
 
 
 function App() {

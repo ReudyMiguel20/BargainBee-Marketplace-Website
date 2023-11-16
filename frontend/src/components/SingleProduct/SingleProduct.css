@@ -1,0 +1,36 @@
+.product {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.product-info {
+
+}
+
+.product-price {
+    margin-bottom: 1rem;
+}
+
+.product-button {
+    background-color: #f0c040;
+    border: 1px solid #a88734;
+    border-radius: 2px;
+    padding: 0.5rem 0.5rem;
+    cursor: pointer;
+}
+
+.product-button:hover {
+    background-color: #ddb347;
+}
+
+.product-image {
+    max-height: 200px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}

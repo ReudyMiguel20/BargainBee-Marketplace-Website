@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import SingleProduct  from "../../components/SingleProduct/SingleProduct";
+import "./Products.css";
 
 export const Products = () => {
     const { data, error } = useQuery({
@@ -9,14 +11,13 @@ export const Products = () => {
     return (
         <div className="products">
             <h1>Products</h1>
+            <div className="all-products">
             {data?.map((product) => (
-                <div key={product.id}>
-                    <h3>{product.item_id}</h3>
-                    <h2>{product.item_name}</h2>
-                    <p>{product.description}</p>
-                    <p>{product.price}</p>
+                <div key={product.item_id}>
+                    <SingleProduct product={product} />
                 </div>
             ))}
+            </div>
         </div>
     );
 }
