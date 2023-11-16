@@ -1,0 +1,17 @@
+.hero-banner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-banner img {
+    object-fit: cover;
+    object-position: center;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 50%;
+    height: 50%;
+}
