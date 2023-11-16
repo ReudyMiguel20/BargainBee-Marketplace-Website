@@ -3,16 +3,15 @@ import SingleProduct  from "../../components/SingleProduct/SingleProduct";
 import "./Products.css";
 
 export const Products = () => {
-    const { data, error } = useQuery({
+    const { data, error, status } = useQuery({
         queryKey: ["products"],
         queryFn: () => fetch("http://localhost:8080/api/item/all").then((res) => res.json())
     });
 
     return (
         <div className="products">
-            <h1>Products</h1>
             <div className="all-products">
-            {data?.map((product) => (
+            {Array.isArray(data) && data?.map((product) => (
                 <div key={product.item_id}>
                     <SingleProduct product={product} />
                 </div>
