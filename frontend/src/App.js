@@ -13,17 +13,19 @@ function App() {
     return (
         <div className="app">
             <QueryClientProvider client={client}>
-            <Router>
-                <AppNavbar/>
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
-                    <Route path="/products" element={<Products />}/>
-                    {/*<Route path"/products/:id" element={<Product />}/>*/}
-                    <Route path="*" element={<h1>Not Found</h1>}/>
-                </Routes>
-                <AppFooter />
-            </Router>
+                <Router>
+                    <AppNavbar/>
+                    <div className="main-content">
+                        <Routes>
+                            <Route path="/" element={<Home/>}/>
+                            <Route path="/products" element={<Products />}/>
+                            {/*<Route path"/products/:id" element={<Product />}/>*/}
+                            <Route path="*" element={<h1>Not Found</h1>}/>
+                        </Routes>
+                    </div>
+                </Router>
             </QueryClientProvider>
+            <AppFooter />
         </div>
     );
 }
