@@ -39,7 +39,7 @@ public interface ItemListingService {
     List<ItemInfo> searchItemsByKeyword(String keyword);
 
     List<ItemInfo> getAllItems();
-//
+
     ItemInfo getItemByItemId(String itemId);
 
     List<ItemInfo> getItemsByPriceBetween(double minPrice, double maxPrice);
