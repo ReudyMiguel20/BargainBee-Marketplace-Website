@@ -1,0 +1,47 @@
+.principal-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    margin-top: 50px;
+}
+
+hr {
+    width: 100%;
+    border: 1px solid grey;
+
+}
+
+.product-image p {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.product-principal-info {
+    display: flex;
+    flex-direction: column;
+    padding-left: 50px;
+    padding-right: 200px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.product-principal-info button {
+    background-color: dodgerblue;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16pt;
+    border-radius: 5px;
+}
+
+.product-button-info h5 {
+    margin-top: 10px;
+    text-align: center;
+    font-family: 'Young Serif', serif;
+}

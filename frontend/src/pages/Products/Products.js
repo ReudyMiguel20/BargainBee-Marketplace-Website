@@ -8,6 +8,14 @@ export const Products = () => {
         queryFn: () => fetch("http://localhost:8080/api/item/all").then((res) => res.json())
     });
 
+    if (status === 'loading') {
+        return <span className="fetching-status">Loading...</span>
+    }
+
+    if (status === 'error') {
+        return <span className="fetching-status">There was an error fetching products... Try again later.</span>
+    }
+
     return (
         <div className="products">
             <div className="all-products">
