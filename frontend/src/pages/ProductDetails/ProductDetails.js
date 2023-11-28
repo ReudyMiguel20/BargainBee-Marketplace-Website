@@ -30,8 +30,8 @@ const ProductDetails = () => {
 
             <div className="product-principal-info">
                 <h3>{product.item_name}</h3>
-                <h4>USD$ {product.price}</h4>
-                <h5>Published: {product.date_listed}</h5>
+                <h4>USD$ {product.price.toLocaleString('en-US')}</h4>
+                <h5 style={{color: "grey"}}>Published: {product.date_listed}</h5>
 
                 <hr/>
 
@@ -43,8 +43,8 @@ const ProductDetails = () => {
                 <hr/>
 
                 <div>
-                    <h5>Location here</h5>
-                    <h5>Category Again here</h5>
+                    <h5 style={{color: "grey"}}>Location here</h5>
+                    <h5 style={{color: "grey"}}>Category Again here</h5>
                 </div>
                 {/*<div className="product-description">*/}
                 {/*    */}
