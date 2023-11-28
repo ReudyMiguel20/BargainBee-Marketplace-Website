@@ -1,14 +1,14 @@
 import "../../components/SingleProduct/SingleProduct.css";
-import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye } from '@fortawesome/free-solid-svg-icons'
+import {Link} from "react-router-dom";
+import {Button} from "react-bootstrap";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEye} from '@fortawesome/free-solid-svg-icons'
 import ProductDetails from "../../pages/ProductDetails/ProductDetails";
 
 const SingleProduct = ({product}) => {
 
     const handleShowDetails = () => {
-        <ProductDetails product={product} />
+        <ProductDetails product={product}/>
     }
 
     return (
@@ -20,7 +20,11 @@ const SingleProduct = ({product}) => {
 
                 <div className="product-name-description">
                     <h5>{product.item_name}</h5>
-                    <p>{product.description}</p>
+                    <p>
+                        {product.description.length > 150
+                            ? `${product.description.substring(0, 150)}.....`
+                            : product.description}
+                    </p>
                 </div>
 
                 <div className="product-complete-info">
@@ -31,13 +35,14 @@ const SingleProduct = ({product}) => {
 
                     <div className="product-info-button">
                         <Link to={`/products/${product.item_id}`}>
-                        <Button variant="primary" onClick={handleShowDetails}><FontAwesomeIcon icon={faEye} /> Show Details</Button>
+                            <Button variant="primary" onClick={handleShowDetails}><FontAwesomeIcon icon={faEye}/> Show Details</Button>
                         </Link>
                     </div>
                 </div>
             </div>
         </div>
-    );
+    )
+        ;
 }
 
 export default SingleProduct;
