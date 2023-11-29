@@ -4,6 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import beeicon from "../../assets/bee.png";
 import "./AppNavbar.css";
+import {Link} from "react-router-dom";
 
 function AppNavbar() {
     return (
@@ -15,15 +16,64 @@ function AppNavbar() {
                     <Nav className="me-auto">
                         <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href="/products">Items</Nav.Link>
-                        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                                Another action
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                        <NavDropdown title="Categories" id="basic-nav-dropdown">
+                            <Link to="/category/appliances">
+                                <NavDropdown.Item href="#action/3.3">Appliances</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/artandcollectibles">
+                                <NavDropdown.Item href="#action/3.3">Art & Collectibles</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/books">
+                                <NavDropdown.Item href="#action/3.3">Books</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/clothing">
+                                <NavDropdown.Item href="#action/3.3">Clothing</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/computers">
+                                <NavDropdown.Item href="#action/3.3">Computers</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/electronics">
+                                <NavDropdown.Item href="#action/3.3">Electronics</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/foodanddrink">
+                                <NavDropdown.Item href="#action/3.3">Food & Drink</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/furniture">
+                                <NavDropdown.Item href="#action/3.3">Furniture</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/healthandbeauty">
+                                <NavDropdown.Item href="#action/3.3">Health & Beauty</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/homeandgarden">
+                                <NavDropdown.Item href="#action/3.3">Home & Garden</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/jewelry">
+                                <NavDropdown.Item href="#action/3.3">Jewelry</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/music">
+                                <NavDropdown.Item href="#action/3.3">Music</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/pets">
+                                <NavDropdown.Item href="#action/3.3">Pets</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/sportsandoutdoors">
+                                <NavDropdown.Item href="#action/3.3">Sports & Outdoors</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/toys">
+                                <NavDropdown.Item href="#action/3.3">Toys</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/vehicles">
+                                <NavDropdown.Item href="#action/3.3">Vehicles</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/videogames">
+                                <NavDropdown.Item href="#action/3.3">Videogames</NavDropdown.Item>
+                            </Link>
+                            <Link to="/category/other">
+                                <NavDropdown.Item href="#action/3.3">Other</NavDropdown.Item>
+                            </Link>
                             <NavDropdown.Divider/>
                             <NavDropdown.Item href="#action/3.4">
-                                Separated link
+                                Test for divider
                             </NavDropdown.Item>
                         </NavDropdown>
                     </Nav>

@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 
 const RelatedProducts = (id) => {
     // const [relatedProducts, setRelatedProducts] = useState(null);
-    const {data, error, status} = useQuery ( {
+    const {data, error, status} = useQuery({
         refetchOnWindowFocus: false,
         queryKey: ["relatedProducts"],
         queryFn: () => fetch("http://localhost:8080/api/item/related/" + id.id).then((res) => res.json())
@@ -23,15 +23,15 @@ const RelatedProducts = (id) => {
 
 
     return (
-      <div className="related-products">
-          {Array.isArray(data) && data?.map((product) => (
-              <div key={product.item_id}>
-                  <Link style={{textDecoration: "none"}} to={`/products/${product.item_id}`}>
-                  <RelatedProductView product={product} />
-                  </Link>
-              </div>
-              ))};
-      </div>
+        <div className="related-products">
+            {Array.isArray(data) && data?.map((product) => (
+                <div key={product.item_id}>
+                    <Link style={{textDecoration: "none"}} to={`/products/${product.item_id}`}>
+                        <RelatedProductView product={product}/>
+                    </Link>
+                </div>
+            ))};
+        </div>
     );
 
 

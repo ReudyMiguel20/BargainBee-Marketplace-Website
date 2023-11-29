@@ -15,3 +15,7 @@ font-size: 1.5rem;
     padding-right: 20px;
     border-radius: 5px;
 }
+
+.navbar a {
+    text-decoration: none;
+}

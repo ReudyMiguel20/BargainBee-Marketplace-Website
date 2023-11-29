@@ -1,0 +1,19 @@
+.product-category-name {
+    margin-left: 20px;
+}
+
+.products-by-category {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 1rem;
+    padding: 1rem;
+}
+
+.fetching-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-size: 2rem;
+    font-weight: bold;
+}
