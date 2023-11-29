@@ -26,7 +26,7 @@ const RelatedProducts = (id) => {
       <div className="related-products">
           {Array.isArray(data) && data?.map((product) => (
               <div key={product.item_id}>
-                  <Link to={`/products/${product.item_id}`}>
+                  <Link style={{textDecoration: "none"}} to={`/products/${product.item_id}`}>
                   <RelatedProductView product={product} />
                   </Link>
               </div>
