@@ -1,3 +1,7 @@
+.product-related-div {
+    text-decoration: none;
+}
+
 .related-product-img {
     display: flex;
     flex-direction: row;
@@ -19,4 +23,12 @@
     text-align: center;
     justify-content: center;
     margin-right: 25px;
+}
+
+.related-product-name {
+    color: black;
+}
+
+.related-product-price{
+    color: darkslategrey;
 }
