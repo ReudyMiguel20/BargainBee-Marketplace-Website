@@ -1,8 +1,3 @@
-.App {
-  text-align: center;
-}
-
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -46,4 +41,10 @@
 
 .main-content {
   flex-grow: 1;
+  margin-bottom: 400px;
+}
+
+.AppFooter {
+  position: sticky;
+  bottom: 0;
 }

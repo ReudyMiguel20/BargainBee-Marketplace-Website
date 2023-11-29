@@ -26,7 +26,7 @@ function App() {
                     </div>
                 </Router>
             </QueryClientProvider>
-            <AppFooter />
+            <AppFooter className="AppFooter" />
         </div>
     );
 }

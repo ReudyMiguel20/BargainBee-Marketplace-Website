@@ -3,6 +3,7 @@ import {Link, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import "./ProductDetails.css";
 import {faHeart, faLocationDot, faTag} from "@fortawesome/free-solid-svg-icons";
+import RelatedProducts from "../../components/RelatedProducts/RelatedProducts";
 
 const ProductDetails = () => {
     const {id} = useParams();
@@ -61,7 +62,7 @@ const ProductDetails = () => {
                     <h4>Related products:</h4>
 
                     <div className="product-related-info">
-
+                        <RelatedProducts id={id}/>
                     </div>
                 </div>
             </div>

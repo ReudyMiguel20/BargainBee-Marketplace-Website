@@ -48,7 +48,7 @@ hr {
 
 }
 
-.product-image img {
+.product-image-info img {
     width: 540px;
     height: 304px;
     border-radius: 5px;
@@ -190,6 +190,13 @@ hr {
 .product-related {
     display: flex;
     flex-direction: column;
-    margin-top: 75px;
+    margin-top: 25px;
     margin-bottom: 50px;
 }
+
+
+
+/*.product-related-info {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*}*/

@@ -1,0 +1,5 @@
+.related-products {
+    display: flex;
+    flex-direction: row;
+}
+

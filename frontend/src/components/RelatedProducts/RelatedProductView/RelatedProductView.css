@@ -1,0 +1,22 @@
+.related-product-img {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.related-product-img img {
+    width: 225px;
+    height:  165px;
+    object-fit: fill;
+    border-radius: 15%;
+    margin-right: 25px;
+    border: 2px solid #ddb347;
+}
+
+.related-product-info {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    margin-right: 25px;
+}
