@@ -26,7 +26,7 @@ const AppFooter = () => {
                     </ul>
                 </div>
 
-                <div class="footerBottom">
+                <div className="footerBottom">
                     <p>© 2023 All Rights Reserved. Developed By <a href="https://github.com/ReudyMiguel20">Reudy
                         Guerrero</a></p>
                 </div>

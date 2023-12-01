@@ -2,12 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import "./ProductDetails.css";
-import {faHeart, faLocationDot, faTag} from "@fortawesome/free-solid-svg-icons";
+import {faCircleInfo, faHeart, faLocationDot, faTag} from "@fortawesome/free-solid-svg-icons";
 import RelatedProducts from "../../components/RelatedProducts/RelatedProducts";
+import ModalProductCondition from "../../components/ModalProductCondition/ModalProductCondition";
 
 const ProductDetails = () => {
     const {id} = useParams();
     const [product, setProduct] = useState(null);
+    const [modalShow, setModalShow] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/item/${id}`)
@@ -28,18 +30,28 @@ const ProductDetails = () => {
 
     let userPicture = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png";
 
+    let baseUrlCategory = "http://localhost:3000/category/";
+
     return (
         <div className="principal-div">
             <div className="product-image">
                 <div className="product-image-info">
-                    <p className="product-links"><Link to="/">Home</Link> > {productCategory} > {product.item_name}</p>
+                    <p className="product-links"><Link to="/">Home</Link> > <Link
+                        to={`${baseUrlCategory}${productCategory}`}>{productCategory}</Link> > {product.item_name}</p>
                     <img src={product.image}/>
                 </div>
 
                 <div className="product-condition">
                     <div className="product-condition-info">
                         <h6>Condition</h6>
-                        <h6>{productCondition}</h6>
+                        <h6>{productCondition}
+                            <button
+                                onClick={() => setModalShow(true)}
+                                style={{border: "none", backgroundColor: "transparent", cursor: "pointer"}}
+                            >
+                                <FontAwesomeIcon style={{paddingLeft: "5px"}} icon={faCircleInfo}/>
+                            </button>
+                        </h6>
                     </div>
 
                     <div className="hr">
@@ -92,7 +104,7 @@ const ProductDetails = () => {
 
                 <div className="product-seller-info">
                     <div className="product-seller-username">
-                    <h5>Sold By: {product.seller}</h5>
+                        <h5>Sold By: {product.seller}</h5>
                     </div>
 
                     <div className="product-seller-picture">
@@ -104,9 +116,11 @@ const ProductDetails = () => {
                         <button>Report Ad</button>
                     </div>
                 </div>
-                </div>
             </div>
-            );
-            }
 
-            export default ProductDetails;
+            {modalShow && <ModalProductCondition setModalShow={setModalShow} />}
+        </div>
+    );
+}
+
+export default ProductDetails;
