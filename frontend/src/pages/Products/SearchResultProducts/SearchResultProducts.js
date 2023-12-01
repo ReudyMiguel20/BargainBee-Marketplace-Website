@@ -3,6 +3,7 @@ import {useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import SingleProduct from "../../../components/SingleProduct/SingleProduct";
 import "./SearchResultProducts.css";
+import Cookies from "js-cookie";
 
 const SearchResultProducts = () => {
     const {search} = useParams();
@@ -20,7 +21,6 @@ const SearchResultProducts = () => {
     if (status === 'error') {
         return <span className="fetching-status">There was an error fetching products... Try again later.</span>
     }
-
 
     return (
         <div>
