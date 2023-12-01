@@ -7,19 +7,52 @@ import "./AppNavbar.css";
 import {Link} from "react-router-dom";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useNavigate} from 'react-router-dom';
+import {useState, useRef} from "react";
 
 function AppNavbar() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
+    const searchButtonRef = useRef();
+
+    const handleInputChange = (event) => {
+        setSearchTerm(event.target.value);
+    }
+
+    const handleSearchClick = (event) => {
+        event.preventDefault();
+        navigate(`/search/${searchTerm}`);
+    }
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSearchClick(event);
+        }
+    }
+
     return (
-
-
-
 
         <Navbar data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
             <div className="upper-nav">
-                <Navbar.Brand className="title" href="/"><img src={beeicon}  style={{ width: '40px', height: '40px' }} /> Bargain Bee</Navbar.Brand>
+                <Navbar.Brand className="title" href="/"><img src={beeicon}
+                                                              style={{width: '40px', height: '40px'}}/> Bargain
+                    Bee</Navbar.Brand>
                 <div className="search-container">
-                    <input className="search-bar" type="text" placeholder="Search"/>
-                    <button className="search-button"><FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#000000",}} /></button>
+                    <input
+                        className="search-bar"
+                        type="text"
+                        placeholder="Search"
+                        value={searchTerm}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyPress}
+                    />
+                    <button
+                        ref={searchButtonRef}
+                        className="search-button"
+                        onClick={handleSearchClick}
+                    >
+                        <FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#000000",}}/>
+                    </button>
                 </div>
 
             </div>
