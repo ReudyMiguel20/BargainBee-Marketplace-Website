@@ -5,12 +5,25 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import beeicon from "../../assets/bee.png";
 import "./AppNavbar.css";
 import {Link} from "react-router-dom";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function AppNavbar() {
     return (
 
+
+
+
         <Navbar data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
+            <div className="upper-nav">
                 <Navbar.Brand className="title" href="/"><img src={beeicon}  style={{ width: '40px', height: '40px' }} /> Bargain Bee</Navbar.Brand>
+                <div className="search-container">
+                    <input className="search-bar" type="text" placeholder="Search"/>
+                    <button className="search-button"><FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#000000",}} /></button>
+                </div>
+
+            </div>
+            <div className="lower-nav">
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
@@ -78,8 +91,10 @@ function AppNavbar() {
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
-        </Navbar>
+            </div>
 
+
+        </Navbar>
     );
 }
 

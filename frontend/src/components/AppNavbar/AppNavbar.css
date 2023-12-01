@@ -19,3 +19,42 @@ font-size: 1.5rem;
 .navbar a {
     text-decoration: none;
 }
+
+.upper-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+}
+
+.bg-body-tertiary {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-container {
+    position: relative;
+    width: 200px;
+}
+
+.search-bar {
+    width: 100%;
+    padding-right: 35px; /* Make room for the button */
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 16px;
+}
+
+.search-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    outline: none;
+   background-color: #ddb347;
+    padding: 3px 5px;
+    cursor: pointer;
+}
