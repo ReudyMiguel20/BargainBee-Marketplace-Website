@@ -41,9 +41,15 @@ function AppNavbar() {
         navigate(`/login`);
     }
 
+    const removeAllCookies = () => {
+        for (var cookie in Cookies.get()) {
+            Cookies.remove(cookie);
+        }
+    }
+
     const flushLogoutDetails = (event) => {
         event.preventDefault();
-        Cookies.remove("access_token");
+        removeAllCookies();
         localStorage.removeItem("userLoggedIn");
         setUserLoggedIn(false);
         navigate(`/`);
@@ -95,7 +101,9 @@ function AppNavbar() {
                         </button>
 
                         <button
-                            onClick={() => window.location.href = "http://localhost:8181/realms/spring-boot-microservices-realm/protocol/openid-connect/auth?client_id=account-console&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&state=634d9590-adc2-47a1-8228-706794d1ea01&response_mode=fragment&response_type=code&scope=openid&nonce=0e3e042a-e096-4084-b392-1068ff5a9a57&code_challenge=Bmvh984fpxOBJ3t_ahFpab-gNtm_UQJXI0T-Fh_Yo50&code_challenge_method=S256"}
+                            onClick={() => window.location.href = "http://localhost:8181/realms/spring-boot-microservices-realm/account/#/"}
+
+                            // onClick={() => window.location.href = "http://localhost:8181/realms/spring-boot-microservices-realm/protocol/openid-connect/auth?client_id=account-console&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&state=634d9590-adc2-47a1-8228-706794d1ea01&response_mode=fragment&response_type=code&scope=openid&nonce=0e3e042a-e096-4084-b392-1068ff5a9a57&code_challenge=Bmvh984fpxOBJ3t_ahFpab-gNtm_UQJXI0T-Fh_Yo50&code_challenge_method=S256"}
                         >
                             Register
                         </button>
