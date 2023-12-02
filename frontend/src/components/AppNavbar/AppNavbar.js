@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import beeicon from "../../assets/bee.png";
 import "./AppNavbar.css";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useNavigate} from 'react-router-dom';
@@ -12,6 +12,7 @@ import {useState, useRef} from "react";
 
 function AppNavbar() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [userLoggedIn, setUserLoggedIn] = useState(false);
     const navigate = useNavigate();
     const searchButtonRef = useRef();
 
@@ -30,13 +31,17 @@ function AppNavbar() {
         }
     }
 
+    const handleLoginClick = (event) => {
+        event.preventDefault();
+        navigate(`/login`);
+    }
+
     return (
 
         <Navbar data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
             <div className="upper-nav">
                 <Navbar.Brand className="title" href="/"><img src={beeicon}
-                                                              style={{width: '40px', height: '40px'}}/> Bargain
-                    Bee</Navbar.Brand>
+                                                              style={{width: '40px', height: '40px'}}/> Bargain Bee</Navbar.Brand>
                 <div className="search-container">
                     <input
                         className="search-bar"
@@ -54,6 +59,27 @@ function AppNavbar() {
                         <FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#000000",}}/>
                     </button>
                 </div>
+
+                {userLoggedIn ? (
+                    <div>
+                        <h6 style={{color: "white", marginLeft: "20px"}}>Welcome back, *username here*</h6>
+                    </div>
+                ) : (
+                    <div className="buttons-container">
+                        <button
+                            onClick={handleLoginClick}
+                        >
+                            Login
+                        </button>
+
+                        <button
+                            onClick={() => window.location.href = "http://localhost:8181/realms/spring-boot-microservices-realm/protocol/openid-connect/auth?client_id=account-console&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&state=634d9590-adc2-47a1-8228-706794d1ea01&response_mode=fragment&response_type=code&scope=openid&nonce=0e3e042a-e096-4084-b392-1068ff5a9a57&code_challenge=Bmvh984fpxOBJ3t_ahFpab-gNtm_UQJXI0T-Fh_Yo50&code_challenge_method=S256"}
+                        >Register
+                        </button>
+
+
+                    </div>
+                )};
 
             </div>
             <div className="lower-nav">

@@ -59,3 +59,13 @@ font-size: 1.5rem;
     padding: 3px 5px;
     cursor: pointer;
 }
+
+.buttons-container button {
+    background-color: #ddb347;
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    margin-left: 25px;
+    cursor: pointer;
+    border-radius: 5px;
+}

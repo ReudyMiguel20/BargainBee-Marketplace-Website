@@ -8,6 +8,7 @@ import AppFooter from "./components/AppFooter/AppFooter";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Category from "./pages/Products/Category/Category";
 import SearchResultProducts from "./pages/Products/SearchResultProducts/SearchResultProducts";
+import UserLogin from "./pages/UserLogin";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                             <Route path="/products/:id" element={<ProductDetails />}/>
                             <Route path="/category/:category" element={<Category />}/>
                             <Route path="/search/:search" element={<SearchResultProducts />}/>
+                            <Route path="/login" element={<UserLogin />}/>
                             <Route path="*" element={<h1>Not Found</h1>}/>
                         </Routes>
                     </div>
