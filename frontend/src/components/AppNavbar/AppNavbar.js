@@ -19,8 +19,8 @@ function AppNavbar() {
     const accessToken = Cookies.get("access_token");
     const decodedToken = typeof accessToken === 'string' ? jwtDecode(accessToken) : null;
     const username = decodedToken ? decodedToken.preferred_username : null;
-    localStorage.setItem("username", username);
 
+    localStorage.setItem("username", username);
 
     const handleInputChange = (event) => {
         setSearchTerm(event.target.value);
