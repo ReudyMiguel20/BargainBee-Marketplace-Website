@@ -6,7 +6,7 @@ import "./AppNavbar.css";
 import {Link, useNavigate} from "react-router-dom";
 import {faMagnifyingGlass, faRightFromBracket} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useContext, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import UserContext from "../../UserContext";
 import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
@@ -19,6 +19,7 @@ function AppNavbar() {
     const accessToken = Cookies.get("access_token");
     const decodedToken = typeof accessToken === 'string' ? jwtDecode(accessToken) : null;
     const username = decodedToken ? decodedToken.preferred_username : null;
+    localStorage.setItem("username", username);
 
 
     const handleInputChange = (event) => {
@@ -86,11 +87,19 @@ function AppNavbar() {
                 {testUserLoggedIn === "true" ? (
                     <div className="user-logged-in-status">
                         <h6>Welcome back, {username}</h6>
+                        <div className="user-logged-in-buttons">
+                        <button
+                            style={{backgroundColor: "#dda12a"}}
+                        >
+                            + Publish New Item
+                        </button>
                         <button
                             onClick={flushLogoutDetails}
+                            style={{backgroundColor: "red"}}
                         >
                             Logout <FontAwesomeIcon style={{paddingLeft: "5px"}} icon={faRightFromBracket} />
                         </button>
+                        </div>
                     </div>
                 ) : (
                     <div className="buttons-container">

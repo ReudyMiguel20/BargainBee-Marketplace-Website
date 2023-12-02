@@ -77,7 +77,6 @@
 }
 
 .user-logged-in-status button {
-    background-color: red;
     margin-left: 20px;
     border-radius: 8%;
     border: none;
@@ -87,3 +86,5 @@
     font-family: "Roboto", sans-serif;
     font-weight: bold;
 }
+
+
