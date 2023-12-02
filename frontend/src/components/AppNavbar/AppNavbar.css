@@ -79,10 +79,11 @@
 .user-logged-in-status button {
     background-color: red;
     margin-left: 20px;
-    border-radius: 35%;
+    border-radius: 8%;
     border: none;
     outline: none;
     cursor: pointer;
     padding: 5px;
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
 }
-

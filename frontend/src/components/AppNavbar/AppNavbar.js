@@ -4,7 +4,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import beeicon from "../../assets/bee.png";
 import "./AppNavbar.css";
 import {Link, useNavigate} from "react-router-dom";
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {faMagnifyingGlass, faRightFromBracket} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useContext, useRef, useState} from "react";
 import UserContext from "../../UserContext";
@@ -89,7 +89,7 @@ function AppNavbar() {
                         <button
                             onClick={flushLogoutDetails}
                         >
-                            Logout
+                            Logout <FontAwesomeIcon style={{paddingLeft: "5px"}} icon={faRightFromBracket} />
                         </button>
                     </div>
                 ) : (
@@ -102,7 +102,6 @@ function AppNavbar() {
 
                         <button
                             onClick={() => window.location.href = "http://localhost:8181/realms/spring-boot-microservices-realm/account/#/"}
-
                             // onClick={() => window.location.href = "http://localhost:8181/realms/spring-boot-microservices-realm/protocol/openid-connect/auth?client_id=account-console&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&state=634d9590-adc2-47a1-8228-706794d1ea01&response_mode=fragment&response_type=code&scope=openid&nonce=0e3e042a-e096-4084-b392-1068ff5a9a57&code_challenge=Bmvh984fpxOBJ3t_ahFpab-gNtm_UQJXI0T-Fh_Yo50&code_challenge_method=S256"}
                         >
                             Register
