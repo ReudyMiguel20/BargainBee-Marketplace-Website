@@ -8,7 +8,6 @@
 }
 
 
-
 .login-form-container {
     max-width: 450px;
     margin-right: auto;
@@ -25,13 +24,25 @@
 }
 
 @-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 @keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 .login-form-title {
@@ -75,8 +86,8 @@
     padding-right: 25px;
 }
 
-.login-form-button button  {
-background-color: #ddb347;
+.login-form-button button {
+    background-color: #ddb347;
     color: white;
     padding: 10px 20px;
     margin: 8px 0;

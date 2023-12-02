@@ -1,13 +1,9 @@
-.navbar {
-    /*background-color: black;*/
-}
-
 .navbaritem {
     background-color: black;
 }
 
 .title {
-font-size: 1.5rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
     color: #fff;
@@ -40,7 +36,7 @@ font-size: 1.5rem;
 
 .search-bar {
     width: 100%;
-    padding-right: 35px; /* Make room for the button */
+    padding-right: 35px;
     background-color: white;
     border: none;
     border-radius: 5px;
@@ -55,7 +51,7 @@ font-size: 1.5rem;
     top: 0;
     border: none;
     outline: none;
-   background-color: #ddb347;
+    background-color: #ddb347;
     padding: 3px 5px;
     cursor: pointer;
 }
@@ -69,3 +65,24 @@ font-size: 1.5rem;
     cursor: pointer;
     border-radius: 5px;
 }
+
+.user-logged-in-status {
+    display: flex;
+    align-items: center;
+}
+
+.user-logged-in-status h6 {
+    color: white;
+    margin-left: 20px;
+}
+
+.user-logged-in-status button {
+    background-color: red;
+    margin-left: 20px;
+    border-radius: 35%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 5px;
+}
+

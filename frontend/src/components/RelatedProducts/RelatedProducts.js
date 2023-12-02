@@ -1,6 +1,5 @@
-import React, {useState} from "react";
+import React from "react";
 import {useQuery} from "@tanstack/react-query";
-import SingleProduct from "../SingleProduct/SingleProduct";
 import RelatedProductView from "./RelatedProductView/RelatedProductView";
 import "./RelatedProducts.css";
 import {Link} from "react-router-dom";
