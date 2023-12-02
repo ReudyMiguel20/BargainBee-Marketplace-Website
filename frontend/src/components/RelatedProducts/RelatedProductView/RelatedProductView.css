@@ -10,7 +10,7 @@
 
 .related-product-img img {
     width: 225px;
-    height:  165px;
+    height: 165px;
     object-fit: fill;
     border-radius: 15%;
     margin-right: 25px;
@@ -29,6 +29,6 @@
     color: black;
 }
 
-.related-product-price{
+.related-product-price {
     color: darkslategrey;
 }

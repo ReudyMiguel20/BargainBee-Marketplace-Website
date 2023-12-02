@@ -118,7 +118,7 @@ const ProductDetails = () => {
                 </div>
             </div>
 
-            {modalShow && <ModalProductCondition setModalShow={setModalShow} />}
+            {modalShow && <ModalProductCondition setModalShow={setModalShow}/>}
         </div>
     );
 }

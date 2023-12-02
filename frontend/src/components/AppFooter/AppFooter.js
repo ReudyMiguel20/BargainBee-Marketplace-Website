@@ -1,5 +1,5 @@
 import "./AppFooter.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faFacebook, faGooglePlus, faInstagram, faXTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons'
 
 const AppFooter = () => {
@@ -9,11 +9,11 @@ const AppFooter = () => {
             <div className="footerContainer">
 
                 <div className="socialIcons">
-                    <a href=""><FontAwesomeIcon icon={faFacebook} /></a>
-                    <a href=""><FontAwesomeIcon icon={faInstagram} /></a>
-                    <a href=""><FontAwesomeIcon icon={faXTwitter} /></a>
-                    <a href=""><FontAwesomeIcon icon={faGooglePlus} /></a>
-                    <a href=""><FontAwesomeIcon icon={faYoutube} /></a>
+                    <a href=""><FontAwesomeIcon icon={faFacebook}/></a>
+                    <a href=""><FontAwesomeIcon icon={faInstagram}/></a>
+                    <a href=""><FontAwesomeIcon icon={faXTwitter}/></a>
+                    <a href=""><FontAwesomeIcon icon={faGooglePlus}/></a>
+                    <a href=""><FontAwesomeIcon icon={faYoutube}/></a>
                 </div>
 
                 <div className="footerNav">

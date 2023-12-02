@@ -1,19 +1,25 @@
-import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import beeicon from "../../assets/bee.png";
 import "./AppNavbar.css";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useNavigate} from 'react-router-dom';
-import {useState, useRef} from "react";
+import {useContext, useRef, useState} from "react";
+import UserContext from "../../UserContext";
+import Cookies from "js-cookie";
+import {jwtDecode} from "jwt-decode";
 
 function AppNavbar() {
     const [searchTerm, setSearchTerm] = useState("");
+    const {setUserLoggedIn} = useContext(UserContext);
     const navigate = useNavigate();
     const searchButtonRef = useRef();
+    const accessToken = Cookies.get("access_token");
+    const decodedToken = typeof accessToken === 'string' ? jwtDecode(accessToken) : null;
+    const username = decodedToken ? decodedToken.preferred_username : null;
+
 
     const handleInputChange = (event) => {
         setSearchTerm(event.target.value);
@@ -29,6 +35,21 @@ function AppNavbar() {
             handleSearchClick(event);
         }
     }
+
+    const handleLoginClick = (event) => {
+        event.preventDefault();
+        navigate(`/login`);
+    }
+
+    const flushLogoutDetails = (event) => {
+        event.preventDefault();
+        Cookies.remove("access_token");
+        localStorage.removeItem("userLoggedIn");
+        setUserLoggedIn(false);
+        navigate(`/`);
+    }
+
+    const testUserLoggedIn = localStorage.getItem("userLoggedIn");
 
     return (
 
@@ -54,6 +75,32 @@ function AppNavbar() {
                         <FontAwesomeIcon icon={faMagnifyingGlass} style={{color: "#000000",}}/>
                     </button>
                 </div>
+
+
+                {testUserLoggedIn === "true" ? (
+                    <div className="user-logged-in-status">
+                        <h6>Welcome back, {username}</h6>
+                        <button
+                            onClick={flushLogoutDetails}
+                        >
+                            Logout
+                        </button>
+                    </div>
+                ) : (
+                    <div className="buttons-container">
+                        <button
+                            onClick={handleLoginClick}
+                        >
+                            Login
+                        </button>
+
+                        <button
+                            onClick={() => window.location.href = "http://localhost:8181/realms/spring-boot-microservices-realm/protocol/openid-connect/auth?client_id=account-console&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&state=634d9590-adc2-47a1-8228-706794d1ea01&response_mode=fragment&response_type=code&scope=openid&nonce=0e3e042a-e096-4084-b392-1068ff5a9a57&code_challenge=Bmvh984fpxOBJ3t_ahFpab-gNtm_UQJXI0T-Fh_Yo50&code_challenge_method=S256"}
+                        >
+                            Register
+                        </button>
+                    </div>
+                )};
 
             </div>
             <div className="lower-nav">

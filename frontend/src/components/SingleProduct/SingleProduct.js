@@ -35,7 +35,8 @@ const SingleProduct = ({product}) => {
 
                     <div className="product-info-button">
                         <Link style={{textDecoration: "none"}} to={`/products/${product.item_id}`}>
-                            <Button variant="primary" onClick={handleShowDetails}><FontAwesomeIcon icon={faEye}/> Show Details</Button>
+                            <Button variant="primary" onClick={handleShowDetails}><FontAwesomeIcon icon={faEye}/> Show
+                                Details</Button>
                         </Link>
                     </div>
                 </div>

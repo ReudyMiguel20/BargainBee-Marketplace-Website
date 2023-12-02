@@ -99,7 +99,7 @@ hr {
     margin-top: 35px;
 }
 
-.product-button-info  {
+.product-button-info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -201,7 +201,6 @@ hr {
     margin-top: 25px;
     margin-bottom: 50px;
 }
-
 
 
 /*.product-related-info {*/

@@ -18,8 +18,8 @@ const RelatedProductView = ({product}) => {
                 <div className="related-product-name">
                     <p>
                         {product.item_name.length > 25
-                        ? `${product.item_name.substring(0, 25)}..... `
-                        : product.item_name}
+                            ? `${product.item_name.substring(0, 25)}..... `
+                            : product.item_name}
                     </p>
                 </div>
 

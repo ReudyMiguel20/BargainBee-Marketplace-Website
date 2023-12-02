@@ -5,7 +5,7 @@ import './HeroBanner.css';
 export const HeroBanner = () => {
     return (
         <div className="hero-banner">
-            <img src={herobanner} />
+            <img src={herobanner}/>
         </div>
     );
 }

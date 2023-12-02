@@ -1,6 +1,6 @@
 import "./Category.css";
 import {useQuery} from "@tanstack/react-query";
-import React, {useEffect} from "react";
+import React from "react";
 import SingleProduct from "../../../components/SingleProduct/SingleProduct";
 import {useParams} from "react-router-dom";
 
@@ -11,7 +11,6 @@ const Category = () => {
         queryKey: ['products', category],
         queryFn: () => fetch("http://localhost:8080/api/item/category/" + category).then((res) => res.json())
     });
-
 
     if (status === 'loading') {
         return <span className="fetching-status">Loading...</span>
@@ -26,19 +25,19 @@ const Category = () => {
     console.log(data);
 
     return (
-      <div className="list-products-category">
-          <div className="product-category-name">
-              <h3>All {productCategory} Products</h3>
-          </div>
+        <div className="list-products-category">
+            <div className="product-category-name">
+                <h3>All {productCategory} Products</h3>
+            </div>
 
-          <div className="products-by-category">
-          {Array.isArray(data) && data?.map((product) => (
-              <div key={product.item_id}>
-                  <SingleProduct product={product} />
-              </div>
-          ))}
-          </div>
-      </div>
+            <div className="products-by-category">
+                {Array.isArray(data) && data?.map((product) => (
+                    <div key={product.item_id}>
+                        <SingleProduct product={product}/>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 
 
