@@ -202,6 +202,20 @@ hr {
     margin-bottom: 50px;
 }
 
+.product-featured-styling {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #ddb347;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    width: 100%;
+    font-size: 16pt;
+    border-radius: 5px;
+}
 
 /*.product-related-info {*/
 /*    display: flex;*/

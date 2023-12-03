@@ -12,6 +12,7 @@ import UserLogin from "./pages/UserLogin";
 import UserContext from "./UserContext";
 import {useState} from "react";
 import PostNewItem from "./pages/PostNewItem/PostNewItem";
+import Featured from "./pages/Products/Featured/Featured";
 
 
 function App() {
@@ -28,10 +29,11 @@ function App() {
                             <Routes>
                                 <Route path="/" element={<Home/>}/>
                                 <Route path="/products" element={<Products/>}/>
+                                <Route path="/products/category/:category" element={<Category/>}/>
+                                <Route path="/products/featured" element={<Featured />}/>
                                 <Route path="/products/:id" element={<ProductDetails/>}/>
                                 <Route path="/products/new"
                                        element={userLoggedIn ? <PostNewItem/> : <Navigate to="/login"/>}/>
-                                <Route path="/category/:category" element={<Category/>}/>
                                 <Route path="/search/:search" element={<SearchResultProducts/>}/>
                                 <Route path="/login" element={<UserLogin/>}/>
                                 <Route path="*" element={<h1>Not Found</h1>}/>

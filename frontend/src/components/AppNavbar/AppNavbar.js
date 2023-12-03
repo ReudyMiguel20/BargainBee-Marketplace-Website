@@ -19,7 +19,9 @@ function AppNavbar() {
     const accessToken = Cookies.get("access_token");
     const decodedToken = typeof accessToken === 'string' ? jwtDecode(accessToken) : null;
     const username = decodedToken ? decodedToken.preferred_username : null;
+    const testUserLoggedIn = localStorage.getItem("userLoggedIn");
 
+    // Store username in local storage so that it can be used in the navbar even after a page refresh.
     localStorage.setItem("username", username);
 
     const handleInputChange = (event) => {
@@ -56,7 +58,6 @@ function AppNavbar() {
         navigate(`/`);
     }
 
-    const testUserLoggedIn = localStorage.getItem("userLoggedIn");
 
     return (
 
@@ -126,67 +127,68 @@ function AppNavbar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="/">Home</Nav.Link>
-                        <Nav.Link href="/products">Items</Nav.Link>
-                        <NavDropdown title="Categories" id="basic-nav-dropdown">
-                            <Link to="/category/appliances">
-                                <NavDropdown.Item href="#action/3.3">Appliances</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/artandcollectibles">
-                                <NavDropdown.Item href="#action/3.3">Art & Collectibles</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/books">
-                                <NavDropdown.Item href="#action/3.3">Books</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/clothing">
-                                <NavDropdown.Item href="#action/3.3">Clothing</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/computers">
-                                <NavDropdown.Item href="#action/3.3">Computers</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/electronics">
-                                <NavDropdown.Item href="#action/3.3">Electronics</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/foodanddrink">
-                                <NavDropdown.Item href="#action/3.3">Food & Drink</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/furniture">
-                                <NavDropdown.Item href="#action/3.3">Furniture</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/healthandbeauty">
-                                <NavDropdown.Item href="#action/3.3">Health & Beauty</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/homeandgarden">
-                                <NavDropdown.Item href="#action/3.3">Home & Garden</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/jewelry">
-                                <NavDropdown.Item href="#action/3.3">Jewelry</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/music">
-                                <NavDropdown.Item href="#action/3.3">Music</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/pets">
-                                <NavDropdown.Item href="#action/3.3">Pets</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/sportsandoutdoors">
-                                <NavDropdown.Item href="#action/3.3">Sports & Outdoors</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/toys">
-                                <NavDropdown.Item href="#action/3.3">Toys</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/vehicles">
-                                <NavDropdown.Item href="#action/3.3">Vehicles</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/videogames">
-                                <NavDropdown.Item href="#action/3.3">Videogames</NavDropdown.Item>
-                            </Link>
-                            <Link to="/category/other">
-                                <NavDropdown.Item href="#action/3.3">Other</NavDropdown.Item>
-                            </Link>
+                        <Nav.Link href="/products">All Products</Nav.Link>
+                        <NavDropdown title="Products by Category" id="basic-nav-dropdown">
+                            <NavDropdown.Item as={Link} to="/products/category/appliances">
+                                Appliances
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/artandcollectibles">
+                                Art & Collectibles
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/books">
+                                Books
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/clothing">
+                                Clothing
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/computers">
+                                Computers
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/electronics">
+                                Electronics
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/foodanddrink">
+                                Food & Drink
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/furniture">
+                                Furniture
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/healthandbeauty">
+                                Health & Beauty
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/homeandgarden">
+                                Home & Garden
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/jewelry">
+                                Jewelry
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/music">
+                                Music
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/pets">
+                                Pets
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/sportsandoutdoors">
+                                Sports & Outdoors
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/toys">
+                                Toys
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/vehicles">
+                                Vehicles
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/videogames">
+                                Videogames
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/products/category/other">
+                                Other
+                            </NavDropdown.Item>
                             <NavDropdown.Divider/>
                             <NavDropdown.Item href="#action/3.4">
                                 Test for divider
                             </NavDropdown.Item>
                         </NavDropdown>
+                        <Nav.Link href="/products/featured">Featured Products</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </div>

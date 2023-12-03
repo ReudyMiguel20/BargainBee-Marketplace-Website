@@ -56,7 +56,7 @@ const PostNewItem = () => {
 
     return (
         <div className="new-post-form-container">
-            <form>
+            <form className="new-post-form">
                 <div className="new-post-form-title">
                     <h2>Post New Item</h2>
                 </div>

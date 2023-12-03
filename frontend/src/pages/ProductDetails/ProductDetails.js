@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import "./ProductDetails.css";
-import {faCircleInfo, faHeart, faLocationDot, faTag} from "@fortawesome/free-solid-svg-icons";
+import {faCircleInfo, faHeart, faLocationDot, faMedal, faTag} from "@fortawesome/free-solid-svg-icons";
 import RelatedProducts from "../../components/RelatedProducts/RelatedProducts";
 import ModalProductCondition from "../../components/ModalProductCondition/ModalProductCondition";
 
@@ -10,6 +10,7 @@ const ProductDetails = () => {
     const {id} = useParams();
     const [product, setProduct] = useState(null);
     const [modalShow, setModalShow] = useState(false);
+    const [productIsFeatured, setProductIsFeatured] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/item/${id}`)
@@ -17,6 +18,12 @@ const ProductDetails = () => {
             .then(data => setProduct(data))
             .catch(error => console.error('Error:', error));
     }, [id]);
+
+    useEffect(() => {
+        if (product && product.featured === true) {
+            setProductIsFeatured(true);
+        }
+    }, [product]);
 
     if (!product) {
         return <span>Fetching product...</span>
@@ -30,7 +37,7 @@ const ProductDetails = () => {
 
     let userPicture = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png";
 
-    let baseUrlCategory = "http://localhost:3000/category/";
+    let baseUrlCategory = "http://localhost:3000/products/category/";
 
     return (
         <div className="principal-div">
@@ -84,7 +91,11 @@ const ProductDetails = () => {
                     <h3>{product.item_name}</h3>
                     <h4>USD$ {product.price.toLocaleString('en-US')}</h4>
                     <h5 style={{color: "grey"}}>Published: {product.date_listed}</h5>
-                    <h6>Boost status here</h6>
+                    {productIsFeatured &&
+                        <div className="product-featured-styling">
+                            <h6><span><FontAwesomeIcon icon={faMedal} />Featured Item</span></h6>
+                        </div>
+                    }
                     <hr/>
                 </div>
 
