@@ -117,9 +117,8 @@ const LoginForm = () => {
 
                     <div className="login-error-container">
                         {loginError && <h5>Invalid username or password.</h5>}
-                        {loginSuccess && <Spinner animation="border" variant="warning" />}
+                        {loginSuccess && <Spinner animation="border" variant="warning"/>}
                     </div>
-
 
 
                 </form>

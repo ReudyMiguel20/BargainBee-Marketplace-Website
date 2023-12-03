@@ -6,7 +6,7 @@ import "./AppNavbar.css";
 import {Link, useNavigate} from "react-router-dom";
 import {faMagnifyingGlass, faRightFromBracket} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import UserContext from "../../UserContext";
 import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";

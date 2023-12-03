@@ -10,7 +10,7 @@ import Category from "./pages/Products/Category/Category";
 import SearchResultProducts from "./pages/Products/SearchResultProducts/SearchResultProducts";
 import UserLogin from "./pages/UserLogin";
 import UserContext from "./UserContext";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import PostNewItem from "./pages/PostNewItem/PostNewItem";
 
 
@@ -29,7 +29,8 @@ function App() {
                                 <Route path="/" element={<Home/>}/>
                                 <Route path="/products" element={<Products/>}/>
                                 <Route path="/products/:id" element={<ProductDetails/>}/>
-                                <Route path="/products/new" element={userLoggedIn ? <PostNewItem /> : <Navigate to="/login" />} />
+                                <Route path="/products/new"
+                                       element={userLoggedIn ? <PostNewItem/> : <Navigate to="/login"/>}/>
                                 <Route path="/category/:category" element={<Category/>}/>
                                 <Route path="/search/:search" element={<SearchResultProducts/>}/>
                                 <Route path="/login" element={<UserLogin/>}/>

@@ -51,7 +51,6 @@ const PostNewItem = () => {
         }
 
 
-
         console.log(newProduct);
     }
 

@@ -710,7 +710,7 @@ class ItemListingServiceTest {
 
         Assertions.assertThat(result)
                 .extracting(ItemInfo::getClass)
-                .allMatch(ItemInfo ->ItemInfo.equals(ItemInfo.class));
+                .allMatch(ItemInfo -> ItemInfo.equals(ItemInfo.class));
 
         // Verify
         verify(itemListingRepository, times(1)).findItemsBySeller("seller");
