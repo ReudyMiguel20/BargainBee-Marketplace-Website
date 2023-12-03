@@ -3,10 +3,13 @@ import "./LoginForm.css";
 import axios from 'axios';
 import Cookies from "js-cookie";
 import {useNavigate} from 'react-router-dom';
+import {Spinner} from "react-bootstrap";
 
 const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loginError, setLoginError] = useState(false);
+    const [loginSuccess, setLoginSuccess] = useState(false);
     const navigate = useNavigate();
 
     const [userLoggedIn, setUserLoggedIn] = useState(() => {
@@ -44,12 +47,28 @@ const LoginForm = () => {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             });
+
+            setLoginError(false);
+            setLoginSuccess(true);
             Cookies.set("access_token", response.data.access_token);
-            navigate(`/`);
+
+            // This is to simulate a delay in the login process.
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1000);
 
         } catch (error) {
             console.error('Error:', error);
-            setUserLoggedIn(false);
+
+            setLoginSuccess(true);
+
+            // This is to simulate a delay in the login process.
+            setTimeout(() => {
+                setLoginSuccess(false);
+                setUserLoggedIn(false);
+                setLoginError(true);
+            }, 1000);
+
         }
 
     }
@@ -64,6 +83,7 @@ const LoginForm = () => {
                     </div>
 
                     <div className="login-form-labels">
+
                         <label>
                             <h5>Username</h5>
                             <input
@@ -72,6 +92,7 @@ const LoginForm = () => {
                                 onChange={handleUsernameChange}
                             />
                         </label>
+
                         <label>
                             <h5>Password</h5>
                             <input
@@ -94,8 +115,17 @@ const LoginForm = () => {
                         </button>
                     </div>
 
+                    <div className="login-error-container">
+                        {loginError && <h5>Invalid username or password.</h5>}
+                        {loginSuccess && <Spinner animation="border" variant="warning" />}
+                    </div>
+
+
+
                 </form>
             </div>
+
+
         </div>
     )
 }

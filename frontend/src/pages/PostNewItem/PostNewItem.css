@@ -1,0 +1,72 @@
+.new-post-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.new-post-form-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+form {
+    border: 7px solid #ddb347;
+}
+
+.new-post-form-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 25px;
+    font-size: 16pt;
+    font-weight: bold;
+
+}
+
+.new-post-form-labels label {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 30px;
+    width: 100%;
+}
+
+.new-post-form-labels h5 {
+    width: 20%; /* Adjust as needed */
+}
+
+.new-post-form-labels input,
+.new-post-form-labels textarea {
+    width: 75%; /* Adjust as needed */
+}
+
+.label-username {
+    display: flex;
+    flex-direction: column;
+}
+
+.new-post-form-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.new-post-form-submit button {
+    background-color: #ddb347;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16pt;
+    border-radius: 5px;
+}
+

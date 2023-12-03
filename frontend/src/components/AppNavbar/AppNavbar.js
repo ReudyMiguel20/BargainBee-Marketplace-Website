@@ -6,7 +6,7 @@ import "./AppNavbar.css";
 import {Link, useNavigate} from "react-router-dom";
 import {faMagnifyingGlass, faRightFromBracket} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useContext, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import UserContext from "../../UserContext";
 import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
@@ -20,6 +20,7 @@ function AppNavbar() {
     const decodedToken = typeof accessToken === 'string' ? jwtDecode(accessToken) : null;
     const username = decodedToken ? decodedToken.preferred_username : null;
 
+    localStorage.setItem("username", username);
 
     const handleInputChange = (event) => {
         setSearchTerm(event.target.value);
@@ -61,9 +62,10 @@ function AppNavbar() {
 
         <Navbar data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
             <div className="upper-nav">
-                <Navbar.Brand className="title" href="/"><img src={beeicon}
-                                                              style={{width: '40px', height: '40px'}}/> Bargain
-                    Bee</Navbar.Brand>
+                <Navbar.Brand className="title" href="/">
+                    <img src={beeicon} style={{width: '40px', height: '40px'}}/>
+                    Bargain Bee
+                </Navbar.Brand>
                 <div className="search-container">
                     <input
                         className="search-bar"
@@ -86,11 +88,20 @@ function AppNavbar() {
                 {testUserLoggedIn === "true" ? (
                     <div className="user-logged-in-status">
                         <h6>Welcome back, {username}</h6>
-                        <button
-                            onClick={flushLogoutDetails}
-                        >
-                            Logout <FontAwesomeIcon style={{paddingLeft: "5px"}} icon={faRightFromBracket} />
-                        </button>
+                        <div className="user-logged-in-buttons">
+                            <button
+                                style={{backgroundColor: "#dda12a"}}
+                                onClick={() => navigate(`/products/new`)}
+                            >
+                                + Publish New Item
+                            </button>
+                            <button
+                                onClick={flushLogoutDetails}
+                                style={{backgroundColor: "red"}}
+                            >
+                                Logout <FontAwesomeIcon style={{paddingLeft: "5px"}} icon={faRightFromBracket}/>
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <div className="buttons-container">
