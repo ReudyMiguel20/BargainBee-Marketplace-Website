@@ -62,9 +62,10 @@ function AppNavbar() {
 
         <Navbar data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
             <div className="upper-nav">
-                <Navbar.Brand className="title" href="/"><img src={beeicon}
-                                                              style={{width: '40px', height: '40px'}}/> Bargain
-                    Bee</Navbar.Brand>
+                <Navbar.Brand className="title" href="/">
+                    <img src={beeicon} style={{width: '40px', height: '40px'}}/>
+                    Bargain Bee
+                </Navbar.Brand>
                 <div className="search-container">
                     <input
                         className="search-bar"
@@ -88,17 +89,18 @@ function AppNavbar() {
                     <div className="user-logged-in-status">
                         <h6>Welcome back, {username}</h6>
                         <div className="user-logged-in-buttons">
-                        <button
-                            style={{backgroundColor: "#dda12a"}}
-                        >
-                            + Publish New Item
-                        </button>
-                        <button
-                            onClick={flushLogoutDetails}
-                            style={{backgroundColor: "red"}}
-                        >
-                            Logout <FontAwesomeIcon style={{paddingLeft: "5px"}} icon={faRightFromBracket} />
-                        </button>
+                            <button
+                                style={{backgroundColor: "#dda12a"}}
+                                onClick={() => navigate(`/products/new`)}
+                            >
+                                + Publish New Item
+                            </button>
+                            <button
+                                onClick={flushLogoutDetails}
+                                style={{backgroundColor: "red"}}
+                            >
+                                Logout <FontAwesomeIcon style={{paddingLeft: "5px"}} icon={faRightFromBracket}/>
+                            </button>
                         </div>
                     </div>
                 ) : (

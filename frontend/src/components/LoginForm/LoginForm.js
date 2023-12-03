@@ -54,7 +54,7 @@ const LoginForm = () => {
 
             // This is to simulate a delay in the login process.
             setTimeout(() => {
-                navigate(`/`);
+                window.location.href = "/";
             }, 1000);
 
         } catch (error) {
@@ -83,6 +83,7 @@ const LoginForm = () => {
                     </div>
 
                     <div className="login-form-labels">
+
                         <label>
                             <h5>Username</h5>
                             <input
@@ -91,6 +92,7 @@ const LoginForm = () => {
                                 onChange={handleUsernameChange}
                             />
                         </label>
+
                         <label>
                             <h5>Password</h5>
                             <input

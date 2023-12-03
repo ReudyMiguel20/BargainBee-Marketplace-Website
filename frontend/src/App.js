@@ -1,7 +1,7 @@
 import "./App.css";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import AppNavbar from "./components/AppNavbar/AppNavbar";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
 import {Home} from "./pages/Home.js";
 import {Products} from "./pages/Products/Products.js";
 import AppFooter from "./components/AppFooter/AppFooter";
@@ -10,12 +10,13 @@ import Category from "./pages/Products/Category/Category";
 import SearchResultProducts from "./pages/Products/SearchResultProducts/SearchResultProducts";
 import UserLogin from "./pages/UserLogin";
 import UserContext from "./UserContext";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import PostNewItem from "./pages/PostNewItem/PostNewItem";
 
 
 function App() {
     const client = new QueryClient();
-    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const [userLoggedIn, setUserLoggedIn] = useState(() => localStorage.getItem("userLoggedIn") === "true");
 
     return (
         <div className="app">
@@ -28,6 +29,7 @@ function App() {
                                 <Route path="/" element={<Home/>}/>
                                 <Route path="/products" element={<Products/>}/>
                                 <Route path="/products/:id" element={<ProductDetails/>}/>
+                                <Route path="/products/new" element={userLoggedIn ? <PostNewItem /> : <Navigate to="/login" />} />
                                 <Route path="/category/:category" element={<Category/>}/>
                                 <Route path="/search/:search" element={<SearchResultProducts/>}/>
                                 <Route path="/login" element={<UserLogin/>}/>
