@@ -132,7 +132,7 @@ function AppNavbar() {
                             <NavDropdown.Item as={Link} to="/products/category/appliances">
                                 Appliances
                             </NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/products/category/artandcollectibles">
+                            <NavDropdown.Item as={Link} to="/products/category/art-and-collectibles">
                                 Art & Collectibles
                             </NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/products/category/books">
@@ -147,16 +147,16 @@ function AppNavbar() {
                             <NavDropdown.Item as={Link} to="/products/category/electronics">
                                 Electronics
                             </NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/products/category/foodanddrink">
+                            <NavDropdown.Item as={Link} to="/products/category/food-and-drink">
                                 Food & Drink
                             </NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/products/category/furniture">
                                 Furniture
                             </NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/products/category/healthandbeauty">
+                            <NavDropdown.Item as={Link} to="/products/category/health-and-beauty">
                                 Health & Beauty
                             </NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/products/category/homeandgarden">
+                            <NavDropdown.Item as={Link} to="/products/category/home-and-garden">
                                 Home & Garden
                             </NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/products/category/jewelry">
@@ -168,7 +168,7 @@ function AppNavbar() {
                             <NavDropdown.Item as={Link} to="/products/category/pets">
                                 Pets
                             </NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/products/category/sportsandoutdoors">
+                            <NavDropdown.Item as={Link} to="/products/category/sports-and-outdoors">
                                 Sports & Outdoors
                             </NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/products/category/toys">
