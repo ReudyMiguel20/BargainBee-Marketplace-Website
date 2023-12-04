@@ -11,6 +11,14 @@ The scope of this project is to make an API with Spring Boot and the Frontend wi
 users could sell and buy items from other users via bidding or instant buy.
 </p>
 
-<p align="center>
+<h3>Website Pictures</h3>
+
+<h4>Home Page</h4>
+<p align="center">
   <img src="https://i.ibb.co/q7x9XhJ/home.png" alt="" border="0">
+</p>
+
+<h4>Product Details Page</h4>
+<p align="center">
+  <img src="https://i.ibb.co/JKxqqvn/product-details.png" alt="" border="0">
 </p>
