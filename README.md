@@ -10,3 +10,7 @@ Website Marketplace to sell and buy items, WORK IN PROGRESS
 The scope of this project is to make an API with Spring Boot and the Frontend with React. A marketplace website where
 users could sell and buy items from other users via bidding or instant buy.
 </p>
+
+<p align="center>
+  <img src="https://i.ibb.co/q7x9XhJ/home.png" alt="" border="0">
+</p>
