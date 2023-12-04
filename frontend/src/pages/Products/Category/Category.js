@@ -5,7 +5,10 @@ import SingleProduct from "../../../components/SingleProduct/SingleProduct";
 import {useParams} from "react-router-dom";
 
 const Category = () => {
-    const {category} = useParams();
+    let {category} = useParams();
+
+    // Replace all dashes with underscores for the API call.
+    category = category.replace(/-/g, "_");
 
     const {data, error, status} = useQuery({
         queryKey: ['products', category],
@@ -20,9 +23,9 @@ const Category = () => {
         return <span className="fetching-status">There was an error fetching products... Try again later.</span>
     }
 
-    let productCategory = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
 
-    console.log(data);
+    let productCategory = category.replace(/_/g, " ").replace(/and/g, "&").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
+
 
     return (
         <div className="list-products-category">
