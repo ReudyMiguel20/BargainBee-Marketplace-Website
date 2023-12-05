@@ -13,6 +13,7 @@ import UserContext from "./UserContext";
 import {useState} from "react";
 import PostNewItem from "./pages/PostNewItem/PostNewItem";
 import Featured from "./pages/Products/Featured/Featured";
+import UpdateItem from "./pages/UpdateItem/UpdateItem";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                                 <Route path="/products/:id" element={<ProductDetails/>}/>
                                 <Route path="/products/new"
                                        element={userLoggedIn ? <PostNewItem/> : <Navigate to="/login"/>}/>
+                                <Route path="/products/update/:id" element={<UpdateItem />}/>
                                 <Route path="/search/:search" element={<SearchResultProducts/>}/>
                                 <Route path="/login" element={<UserLogin/>}/>
                                 <Route path="*" element={<h1>Not Found</h1>}/>
