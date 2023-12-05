@@ -7,12 +7,13 @@ import categories from "../../data/categories";
 import conditions from "../../data/conditions";
 import axios from "axios";
 import Cookies from "js-cookie";
+import {jwtDecode} from "jwt-decode";
 
 const UpdateItem = () => {
     const {id} = useParams();
-    const owner = localStorage.getItem("username");
-
-    console.log(owner);
+    const accessToken = Cookies.get("access_token");
+    const decodedToken = typeof accessToken === 'string' ? jwtDecode(accessToken) : null;
+    const username = decodedToken ? decodedToken.preferred_username : null;
 
     const [itemName, setItemName] = useState("");
     const [price, setPrice] = useState("");
@@ -38,7 +39,6 @@ const UpdateItem = () => {
     });
 
 
-
     useEffect(() => {
         if (data) {
             setItemName(data.item_name);
@@ -61,13 +61,43 @@ const UpdateItem = () => {
         return <span className="fetching-status">There was an error fetching products... Try again later.</span>
     }
 
+    if (data && data.seller !== username) {
+        return <span>You are not the owner of this product, therefore you can't modify it-</span>
+    }
 
     const handleSubmit = async (event) => {
-        /* Only owner of the item should be able to update the item
-             If the user is the owner of the post it should load completely, if
-             they're not then it should give an error from the beginning, the
-             wrong user should not be even be able to see the form.
-         */
+        event.preventDefault();
+
+        // Check if the current user is the owner of the item
+        if (data && data.seller !== username) {
+            console.error('Error: User is not the owner of this item');
+            return; // Return early to prevent the update
+        }
+
+        const updatedProduct = {
+            item_name: itemName,
+            price,
+            image,
+            tags,
+            quantity,
+            category,
+            condition,
+            description
+        }
+
+        try {
+            const response = await axios.put("http://localhost:8080/api/item/update/" + data.item_id, updatedProduct, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Cookies.get("access_token")}`
+                },
+                withCredentials: true
+            });
+
+            console.log("succ");
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
@@ -84,7 +114,6 @@ const UpdateItem = () => {
                             <h5>Item id: </h5>
                             <p>{data ? data.item_id : ""} </p>
                         </label>
-
 
 
                         <label>
